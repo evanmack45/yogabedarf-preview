@@ -1,3 +1,20 @@
+# DONE 2026-11-25 6:45 AM CT (Gizmo): Y1 red-band small-text contrast fixed to AA (commit 789d1de)
+
+Small text on the red share-card band was #173c36 on #e2512e at 3.14:1 (called ~3.5:1 earlier), below WCAG AA 4.5:1 for small type. Darkening the red would have lowered contrast against dark ink, and cream/white on the same red is only 3.63–3.85:1. Band text on red now uses #081816 (same green-ink family, darker), which is 4.73:1. The cream move panel and the sage/pea/mustard cards still use #173c36. There is no on-page result card with a red band; the done screen keeps ink and redtext on cream, already AA.
+
+Contrast pairs (WCAG 2.x, relative luminance):
+- BEFORE small text on red: #173c36 on #e2512e = 3.14:1 (fail AA small; pass AA large)
+- AFTER small text on red: #081816 on #e2512e = 4.73:1 (pass AA small)
+- Unchanged, already pass: #173c36 on #8db596 sage = 5.29:1; on #c9cf7d pea = 7.32:1; on #e7b43c mustard = 6.33:1; on #f6f9f3 move panel = 11.38:1
+- Unchanged on-page: #b23a1c redtext on #f6f9f3 = 5.62:1; on #e2eadf = 4.86:1; #ffffff on #b5381b go button = 5.92:1
+
+Preview (noindex, robots Disallow: /, Pages cname null): https://evanmack45.github.io/yogabedarf-preview/
+Live app.js was curled and contains inkOnRed: '#081816'. CSS was unchanged (the band is canvas, not CSS).
+
+QA. Gate 390+1440 PASS, no P0/P1, Lighthouse 100/100/100, CLS 0, SEO 60 (noindex) — qa/live-v3/. Gate 390+1280 PASS, no P0/P1, Lighthouse 100/100/100, CLS 0, SEO 60 — qa/live-v3-1280/. Fold, scroll, full and reduced-motion shots reviewed. impeccable 0 findings on home (local and live), session and done at 390x844 and 1280x800 (qa/impeccable-v3-*.json). Sample cards regenerated from the live URL: qa/card.png (94% red band) and qa/card-{000,112,211,321}-v4.png.
+
+Still breaks. Same as v2: old #r= links give the new move set for the same answers; the hidden-tab test is simulated; Shoulder rolls reads as a plain sit in a still; og.png is unchanged from v1. On a narrow phone, commas between the source links in About can wrap onto their own line (pre-existing, not from this fix).
+
 # DONE 2026-11-25 3:06 AM CT (Gizmo): Y1 v2 live (commit d0ecb11)
 
 ## v2 (2026-11-25)

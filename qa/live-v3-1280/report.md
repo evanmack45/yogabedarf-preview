@@ -1,0 +1,19 @@
+# Visual QA gate
+
+Result: PASS (no P0)
+
+## https://evanmack45.github.io/yogabedarf-preview/ — phone
+Load 628ms · frames p50 16.7ms p95 16.7ms · fonts "Bricolage Grotesque" / "Atkinson Hyperlegible Next" · canvases 0
+- no issues
+Shots: evanmack45-github-io-yogabedarf-preview__phone__fold.png, evanmack45-github-io-yogabedarf-preview__phone__scroll025.png, evanmack45-github-io-yogabedarf-preview__phone__scroll050.png, evanmack45-github-io-yogabedarf-preview__phone__scroll075.png, evanmack45-github-io-yogabedarf-preview__phone__scroll100.png, evanmack45-github-io-yogabedarf-preview__phone__full.png, evanmack45-github-io-yogabedarf-preview__phone__reduced-motion.png
+
+## https://evanmack45.github.io/yogabedarf-preview/ — desktop
+Load 638ms · frames p50 16.7ms p95 16.8ms · fonts "Bricolage Grotesque" / "Atkinson Hyperlegible Next" · canvases 0
+- no issues
+Shots: evanmack45-github-io-yogabedarf-preview__desktop__fold.png, evanmack45-github-io-yogabedarf-preview__desktop__scroll025.png, evanmack45-github-io-yogabedarf-preview__desktop__scroll050.png, evanmack45-github-io-yogabedarf-preview__desktop__scroll075.png, evanmack45-github-io-yogabedarf-preview__desktop__scroll100.png, evanmack45-github-io-yogabedarf-preview__desktop__full.png, evanmack45-github-io-yogabedarf-preview__desktop__reduced-motion.png
+
+## https://evanmack45.github.io/yogabedarf-preview/ — lighthouse-mobile
+Lighthouse: {"performance":100,"accessibility":100,"best-practices":100,"seo":60} LCP 1.2 s CLS 0 TBT 0 ms weight Total size was 94 KiB
+- no issues
+
+Human/AI review still required: look at every *__fold.png and *__scroll*.png. This gate catches breakage, not blandness.
