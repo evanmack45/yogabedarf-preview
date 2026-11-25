@@ -1,0 +1,175 @@
+ok   score stays 0 to 100, max 100, min 8
+ok   16 moves (15 or more)
+ok   every answer set gives 4 distinct moves, at least one for the legs, at most one standing
+ok   all 36 answer sets get a different set of four
+ok   changing any one answer swaps at least one move (252 changes, 2.5 moves swapped on average)
+ok   a standing move always comes last
+ok   all 16 moves can be picked
+ok   decode rejects #r=
+ok   decode rejects #r=4
+ok   decode rejects #r=400
+ok   decode rejects #r=033
+ok   decode rejects #r=0000
+ok   decode rejects #r=012x
+ok   decode rejects #r=012dd
+ok   decode rejects #r=-12
+ok   decode rejects #garbage
+ok   decode rejects #r=0 1 2
+ok   decode rejects #R=012
+ok   encode and decode round-trip for all 36 answer sets
+ok   every cue is gentle and cites a source
+ok   @390 noindex meta
+ok   @390 for-sale footer
+ok   @390 "Bedarf is German for need" near the top (y 120)
+ok   @390 start button in first screen (787 of 844)
+ok   @390 no sideways scroll
+ok   @390 starts at 8%, Low Bedarf
+ok   @390 safety line by the start button
+ok   @390 over 8 hours gives 62%, High, adds the standing side bend
+ok   @390 all maxed gives 100% and #r=322
+ok   @390 arrow keys change an answer (94%)
+ok   @390 start opens move 1 of 4
+ok   @390 safety line during the session
+ok   @390 move shows its name and cited source
+ok   @390 after 7 s: 8 seconds left and the figure moved
+ok   @390 pause holds the clock
+ok   @390 timer moves on to move 2 after 15 s
+ok   @390 next move skips ahead
+ok   @390 still pictures shows start and stretch side by side (drawn pair or one art picture)
+ok   @390 space bar pauses
+ok   @390 60 seconds end on the done screen with #r=321d
+ok   @390 done screen shows the meter
+ok   @390 result card PNG 1080x1350 (bedarf-94.png)
+ok   @390 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? https://evanmack45.github.io/yogabedarf-preview/#r=321d)
+ok   @390 measure again returns to the meter
+ok   @390 Escape stops a session
+ok   @390 no storage, cookies, camera or mic
+ok   @390 no third-party requests 
+ok   @390 no console errors 
+ok   @360 noindex meta
+ok   @360 for-sale footer
+ok   @360 "Bedarf is German for need" near the top (y 104)
+ok   @360 start button in first screen (628 of 640)
+ok   @360 no sideways scroll
+ok   @360 starts at 8%, Low Bedarf
+ok   @360 safety line by the start button
+ok   @360 over 8 hours gives 62%, High, adds the standing side bend
+ok   @360 all maxed gives 100% and #r=322
+ok   @360 arrow keys change an answer (94%)
+ok   @360 start opens move 1 of 4
+ok   @360 safety line during the session
+ok   @360 move shows its name and cited source
+ok   @360 after 7 s: 8 seconds left and the figure moved
+ok   @360 pause holds the clock
+ok   @360 timer moves on to move 2 after 15 s
+ok   @360 next move skips ahead
+ok   @360 still pictures shows start and stretch side by side (drawn pair or one art picture)
+ok   @360 space bar pauses
+ok   @360 60 seconds end on the done screen with #r=321d
+ok   @360 done screen shows the meter
+ok   @360 result card PNG 1080x1350 (bedarf-94.png)
+ok   @360 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? https://evanmack45.github.io/yogabedarf-preview/#r=321d)
+ok   @360 measure again returns to the meter
+ok   @360 Escape stops a session
+ok   @360 no storage, cookies, camera or mic
+ok   @360 no third-party requests 
+ok   @360 no console errors 
+ok   @375 noindex meta
+ok   @375 for-sale footer
+ok   @375 "Bedarf is German for need" near the top (y 107)
+ok   @375 start button in first screen (655 of 667)
+ok   @375 no sideways scroll
+ok   @375 starts at 8%, Low Bedarf
+ok   @375 safety line by the start button
+ok   @375 over 8 hours gives 62%, High, adds the standing side bend
+ok   @375 all maxed gives 100% and #r=322
+ok   @375 arrow keys change an answer (94%)
+ok   @375 start opens move 1 of 4
+ok   @375 safety line during the session
+ok   @375 move shows its name and cited source
+ok   @375 after 7 s: 8 seconds left and the figure moved
+ok   @375 pause holds the clock
+ok   @375 timer moves on to move 2 after 15 s
+ok   @375 next move skips ahead
+ok   @375 still pictures shows start and stretch side by side (drawn pair or one art picture)
+ok   @375 space bar pauses
+ok   @375 60 seconds end on the done screen with #r=321d
+ok   @375 done screen shows the meter
+ok   @375 result card PNG 1080x1350 (bedarf-94.png)
+ok   @375 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? https://evanmack45.github.io/yogabedarf-preview/#r=321d)
+ok   @375 measure again returns to the meter
+ok   @375 Escape stops a session
+ok   @375 no storage, cookies, camera or mic
+ok   @375 no third-party requests 
+ok   @375 no console errors 
+ok   @1280 noindex meta
+ok   @1280 for-sale footer
+ok   @1280 "Bedarf is German for need" near the top (y 284)
+ok   @1280 start button in first screen (795 of 800)
+ok   @1280 no sideways scroll
+ok   @1280 starts at 8%, Low Bedarf
+ok   @1280 safety line by the start button
+ok   @1280 over 8 hours gives 62%, High, adds the standing side bend
+ok   @1280 all maxed gives 100% and #r=322
+ok   @1280 arrow keys change an answer (94%)
+ok   @1280 start opens move 1 of 4
+ok   @1280 safety line during the session
+ok   @1280 move shows its name and cited source
+ok   @1280 after 7 s: 8 seconds left and the figure moved
+ok   @1280 pause holds the clock
+ok   @1280 timer moves on to move 2 after 15 s
+ok   @1280 next move skips ahead
+ok   @1280 still pictures shows start and stretch side by side (drawn pair or one art picture)
+ok   @1280 space bar pauses
+ok   @1280 60 seconds end on the done screen with #r=321d
+ok   @1280 done screen shows the meter
+ok   @1280 result card PNG 1080x1350 (bedarf-94.png)
+ok   @1280 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? https://evanmack45.github.io/yogabedarf-preview/#r=321d)
+ok   @1280 measure again returns to the meter
+ok   @1280 Escape stops a session
+ok   @1280 no storage, cookies, camera or mic
+ok   @1280 no third-party requests 
+ok   @1280 no console errors 
+ok   hidden tab for 20 s after 1 s lands on move 2 with 9 s left ({"count":"Move 2 of 4","secs":"9","done":false})
+ok   hidden tab past the end shows the done screen on return ({"count":"Move 1 of 4","secs":"14","done":true})
+ok   reduced motion: still pictures, nothing animates
+ok   reduced motion: the needle does not sweep
+ok   reduced motion: the timer still counts
+ok   shared done link sets the same answers and says they finished
+ok   shared unfinished link shows the score
+ok   bad link #r= starts fresh with a note
+ok   bad link #r=999 starts fresh with a note
+ok   bad link #r=012dd starts fresh with a note
+ok   bad link #garbage starts fresh with a note
+ok   bad link #%3Cscript%3E starts fresh with a note
+ok   bad link #r=0120 starts fresh with a note
+ok   #moves anchor is not treated as a bad link
+ok   r4: 13 moves show art in the list (srcset, width/height, lazy, alt, no fetchpriority)
+ok   r4: chest opener uses the new arms-out-to-the-sides pair; cited NHS cue unchanged
+ok   r4: neck turn keeps the stick pair (the art turns the torso with the head)
+ok   r4: neck turn copy is still the cited NHS head turn
+ok   r4: neck tilt keeps the stick pair (no tilt art was made)
+ok   r3: lazy art loads when scrolled to
+ok   r4: still mode shows the chest-opener art (arms out to the sides)
+ok   r3 card #r=000: 1080x1350, says 8%
+ok   r3 card #r=000: the screenprint ground is drawn into the canvas
+ok   r3 card #r=000: footer uses the canonical URL, no localhost
+ok   r3 card #r=000: no console errors 
+ok   r3 card #r=321d: 1080x1350, says 94%
+ok   r3 card #r=321d: the screenprint ground is drawn into the canvas
+ok   r3 card #r=321d: footer uses the canonical URL, no localhost
+ok   r3 card #r=321d: no console errors 
+ok   r3 card #r=322d: 1080x1350, says 100%
+ok   r3 card #r=322d: the screenprint ground is drawn into the canvas
+ok   r3 card #r=322d: footer uses the canonical URL, no localhost
+ok   r3 card #r=322d: no console errors 
+ok   r3 card #r=0120 (odd link, starts fresh): 1080x1350, says 8%
+ok   r3 card #r=0120: the screenprint ground is drawn into the canvas
+ok   r3 card #r=0120: footer uses the canonical URL, no localhost
+ok   r3 card #r=0120: no console errors 
+ok   no JS: all moves listed with a cited source
+ok   no JS: says the timer needs JavaScript
+ok   no camera or mic code; page says so
+ok   robots.txt disallows all
+
+173 passed, 0 failed

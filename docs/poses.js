@@ -105,11 +105,21 @@ export const stills = (id) => [MOVES[id][0][0], MOVES[id][1][0]];
 export const peak = (id) => MOVES[id][1][0];
 
 // Generated art for three moves (start and stretch in one image, 1024x740). Other moves keep the drawn pair.
-// The neck-turn picture was not wired: the art shows a chin-lift and the move is a cited NHS head turn.
+// neck-turn is not listed: the r4 pair turns the whole torso, not just the head. neck-tilt was not made. Both stay as stick SVGs.
 const POSE_ART = {
-  // chest is not listed: the r3 pair shows hands clasped behind the back, but the cited NHS cue says arms out to the sides. Stick SVG stays until an r4 redo.
+  'chin-down': 'A faceless figure sitting tall, then lowering the chin toward the chest.',
+  chest: 'A faceless figure sitting upright, then sitting away from the chair back with both arms out to the sides and the chest lifted.',
+  'shoulder-rolls': 'A faceless figure sitting with arms hanging, then lifting the shoulders toward the ears.',
+  shoulder: 'A faceless figure sitting upright, then holding one arm across the body at the elbow.',
+  twist: 'A faceless figure sitting upright, then crossing the arms and turning the upper body.',
+  'wrist-down': 'A faceless figure sitting upright, then holding one arm out and pulling the hand downward.',
   'wrist-circles': 'Seated figure in profile, then the same figure with both forearms held out in front and the wrists loose.',
   ankle: 'Seated figure in profile, then the same figure with one leg straightened out in front.',
+  march: 'A faceless figure sitting upright, then lifting one knee as in a seated march.',
+  'knee-hug': 'A faceless figure sitting tall, then hugging one knee toward the chest.',
+  hamstring: 'A faceless figure sitting upright, then sitting forward with one leg straight and the heel on the floor.',
+  calf: 'A faceless figure standing with hands on a chair, then stepping one straight leg back, heel down.',
+  quad: 'A faceless figure standing and holding a chair, then drawing one ankle up toward the body.',
 };
 export const hasArt = (id) => id in POSE_ART;
 export const artPair = (id, lazy = false, sizes = '(max-width: 520px) 240px, 380px') => `<div class="pair art"><img src="img/pose-${id}-512.webp" srcset="img/pose-${id}-512.webp 512w, img/pose-${id}-1024.webp 1024w" sizes="${sizes}" width="1024" height="740" alt="${POSE_ART[id]}"${lazy ? ' loading="lazy"' : ''} decoding="async"></div>`;

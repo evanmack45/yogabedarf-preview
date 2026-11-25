@@ -141,11 +141,11 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
   const p = await page(390, 844);
   await p.goto(base + '#moves'); await p.waitForTimeout(500);
   const imgs = await p.$$eval('.mlist .pair.art img', (els) => els.map((e) => ({ w: e.getAttribute('width'), h: e.getAttribute('height'), lazy: e.loading, fp: e.getAttribute('fetchpriority'), ss: !!e.srcset, alt: e.alt.length > 20 })));
-  ok(imgs.length === 2 && imgs.every((i) => i.w === '1024' && i.h === '740' && i.lazy === 'lazy' && !i.fp && i.ss && i.alt), 'r3: wrist circles and ankle show art in the list (srcset, width/height, lazy, alt, no fetchpriority)');
-  ok((await p.locator('#m-chest .pair svg').count()) === 2, 'r3: chest opener is the stick pair (painted art has hands behind the back, not the cited arms-out-to-the-sides cue)');
-  ok(/put your arms out to the sides/.test(await p.textContent('#m-chest')), 'r3: chest opener copy is still the cited NHS cue');
-  ok((await p.locator('#m-neck-turn .pair svg').count()) === 2, 'r3: neck turn keeps the drawn pair (the art is a chin-lift, not the cited NHS head turn)');
-  ok(/turn your head toward your left shoulder/.test(await p.textContent('#m-neck-turn')), 'r3: neck turn copy is still the cited NHS head turn');
+  ok(imgs.length === 13 && imgs.every((i) => i.w === '1024' && i.h === '740' && i.lazy === 'lazy' && !i.fp && i.ss && i.alt), 'r4: 13 moves show art in the list (srcset, width/height, lazy, alt, no fetchpriority)');
+  ok((await p.locator('#m-chest .pair.art img').count()) === 1 && /put your arms out to the sides/.test(await p.textContent('#m-chest')), 'r4: chest opener uses the new arms-out-to-the-sides pair; cited NHS cue unchanged');
+  ok((await p.locator('#m-neck-turn .pair svg').count()) === 2, 'r4: neck turn keeps the stick pair (the art turns the torso with the head)');
+  ok(/turn your head toward your left shoulder/.test(await p.textContent('#m-neck-turn')), 'r4: neck turn copy is still the cited NHS head turn');
+  ok((await p.locator('#m-neck-tilt .pair svg').count()) === 2, 'r4: neck tilt keeps the stick pair (no tilt art was made)');
   await p.locator('#m-ankle img').scrollIntoViewIfNeeded(); await p.waitForTimeout(400);
   ok(await p.$eval('#m-ankle img', (e) => e.complete && e.naturalWidth > 0), 'r3: lazy art loads when scrolled to');
   await p.context().close();
@@ -153,9 +153,7 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
 {
   const p = await page(390, 844, { reducedMotion: 'reduce' });
   await p.clock.install(); await p.goto(base); await p.click('#start'); await p.clock.runFor(400); await p.click('#skip');
-  ok((await p.textContent('#mname')) === 'Chest opener' && (await p.locator('#stage .pair:not(.art) svg').count()) === 2, 'r3: still mode shows the chest-opener stick pair (painted art unhooked)');
-  await p.click('#skip'); await p.clock.runFor(400);
-  ok((await p.textContent('#mname')) === 'Wrist circles' && await p.locator('#stage .pair.art img').count() === 1 && await p.$eval('#stage .pair.art img', (e) => e.complete && e.naturalWidth > 0), 'r3: still mode shows the wrist-circles art in the stage');
+  ok((await p.textContent('#mname')) === 'Chest opener' && await p.locator('#stage .pair.art img').count() === 1 && await p.$eval('#stage .pair.art img', (e) => e.complete && e.naturalWidth > 0), 'r4: still mode shows the chest-opener art (arms out to the sides)');
   await p.context().close();
 }
 for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], ['#r=322d', 100, false], ['#r=0120', 8, true]]) {

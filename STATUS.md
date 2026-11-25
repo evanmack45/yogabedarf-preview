@@ -28,6 +28,16 @@
   - Source-list commas can wrap onto their own line on a narrow phone
   - Prices and go-live still wait on Dash / Evan; this preview stays noindex
 
+## r4 art wired (local), 2026-11-25 10:45 AM CT
+
+Eleven r4 pose pairs are on the moves list and in the stage, including `y1-r4-chest-opener`, which matches the cited NHS cue (arms out to the sides, chest lifted, sitting away from the chair back). Copy is unchanged. Every keep was checked against its card's cited cue before wiring.
+
+- SHIP (11): chin-down, chest, shoulder (arm-across; hold is clear), twist, wrist-down, shoulder-rolls (shrug is modest, still cannot show a roll), march, knee-hug (hands on the shin, not the back of the thigh), hamstring (back rounds a little vs "Keep your back straight"), calf (heel looks almost down), quad.
+- CUT, keep the stick SVG (2): neck-turn (the art turns the whole torso, not just the head — Dash: do not ship); neck-tilt (not made). side-bend has no r4 art and stays SVG. wrist-circles and ankle stay on the r3 pairs.
+- Local e2e (qa/e2e.mjs): **173 passed, 0 failed**. Start button still in the first screen at 390, 360×640 and 375×667. Chest art is in the list and in still-mode. Neck turn and neck tilt stay SVG.
+- Local gate (qa/local-r4/): Lighthouse **99 / 100 / 100 / SEO 66** (noindex), CLS 0, LCP 2.0 s. Impeccable 0 at 390, 1280 and static. Phone and desktop folds viewed; start button is in the first screen.
+- Live e2e / live gate / live folds: pending a GitHub Pages deploy. The 10:11 AM start-button commit d4c6b0b is still `errored` from the morning Pages outage (Actions still a partial outage at 10:45 AM CT). noindex kept; no DNS or go-live.
+
 ## Start button in the first screen, 2026-11-25 10:11 AM CT
 
 The start button is back in the first screen at 390×844 (bottom at 787 of 844). It also fits 375×812 naturally. On short phones (360×640, 375×667, and other phone widths with height ≤ 800) the button is pinned to the bottom of the viewport so it stays in the first screen, without shrinking the hero further.
@@ -40,7 +50,7 @@ How: the art-directed phone crop (figure + dial, `hero-phone.webp`, aspect 876/7
 
 ### Chest-opener art
 
-The r3 painted pair does not match the cited NHS cue ("put your arms out to the sides… push your chest forward and up"). It shows hands clasped behind the back. Cropping cannot fix that. The stick SVG is the same side-view "arms reach back" idea, but a polished wrong pose would fight the copy, so the painted pair is unhooked and the stick pair is back on `#m-chest` and in the stage. Copy is unchanged. Requested as `Y1-r4-chest-opener` in ART-REQUESTS-r4.md (front or three-quarter view, arms clearly out to the sides). The webp files stay in `src/img/` unused.
+The r3 painted pair did not match the cited NHS cue ("put your arms out to the sides… push your chest forward and up"); it showed hands clasped behind the back and was unhooked in d4c6b0b. The r4 pair (`y1-r4-chest-opener`) does match: front/three-quarter view, both arms out at shoulder height, sitting away from the chair back. It is wired. Copy is unchanged. The r3 webp files were overwritten by the r4 crop.
 
 
 ## r3 art wired, live preview, 2026-11-25 10:05 AM CT

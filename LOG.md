@@ -1,3 +1,7 @@
+# DONE 2026-11-25 10:45 AM CT (Gizmo): r4 pose art wired locally (11 pairs including the new chest opener). Neck-turn and neck-tilt stay SVG. Local e2e 173/0, local gate 99 / CLS 0 / impeccable 0. Live deploy pending Pages.
+
+Eleven r4 keeps were copy-checked against the cited cues in moves.json before wiring. Chest now matches "arms out to the sides" and replaces the unhooked r3 pair. Neck-turn was cut: the art turns the torso with the head (Dash rule). Neck-tilt was not made. Local gate: qa/local-r4/. Start-button fix from 10:11 AM CT is included in this build; d4c6b0b never went live because pages-build-deployment 500'd during the morning outage.
+
 # DONE 2026-11-25 8:29 AM CT (Gizmo): Y1 share card and copied links use a canonical preview URL on localhost (https://evanmack45.github.io/yogabedarf-preview/; switch to https://yogabedarf.com/ at go-live). Canvas footer no longer bakes location.host.
 
 # DONE 2026-11-25 7:36 AM CT (Gizmo): Y1 phone hero is an art-directed crop, not a sliced band (commit pending)
