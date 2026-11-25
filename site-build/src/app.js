@@ -167,12 +167,11 @@ async function card() {
   try {
     art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/share-ground.webp'; });
     x.drawImage(art, 0, 0, W, H);
-    x.fillStyle = '#f7ecd6'; x.beginPath(); x.arc(955, 421, 380, 0, 7); x.fill();
+    // Hide the baked (cropped, red-fixed) dial. Starts just right of the figure.
+    x.fillStyle = '#f7ecd6'; x.fillRect(615, 0, W - 615, 560);
   } catch { art = null; }
-  const gauge = drawGauge(x, s, 800, 400, 220);
-  if (art) {
-    x.save(); x.beginPath(); x.rect(400, 70, 230, 500); x.clip(); x.drawImage(art, 0, 0, W, H); x.restore();
-  }
+  // Sit the live dial fully on the card, to the right of the figure.
+  const gauge = drawGauge(x, s, 880, 400, 170);
   lastLayout = { gauge, score: s, W, H };
   x.fillStyle = bg; x.fillRect(0, STRIP, W, H - STRIP);
   // type on the cream: left of the figure, then the full width under the dial

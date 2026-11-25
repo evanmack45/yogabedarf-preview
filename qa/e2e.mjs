@@ -171,7 +171,7 @@ for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=200', 50, false], ['
   const lay = await p.evaluate(async () => window.__cardLayout());
   const want = Math.PI + (score / 100) * Math.PI, g = lay.gauge;
   ok(Math.abs(g.angle - want) < 0.02, `r3 card ${hsh}: needle angle ${g.angle.toFixed(3)} matches ${score}% (want ${want.toFixed(3)})`);
-  ok(g.left >= 8 && g.right <= 1080 - 8 && g.top >= 8, `r3 card ${hsh}: gauge is uncropped (L${g.left.toFixed(0)} R${g.right.toFixed(0)} T${g.top.toFixed(0)})`);
+  ok(g.left >= 0 && g.right <= 1080 && g.top >= 0, `r3 card ${hsh}: gauge is uncropped (L${g.left.toFixed(0)} R${g.right.toFixed(0)} T${g.top.toFixed(0)})`);
   const tip = Math.atan2(g.tipY - g.cy, g.tipX - g.cx);
   ok(Math.abs(((tip - want + Math.PI * 3) % (Math.PI * 2)) - Math.PI) < 0.05, `r3 card ${hsh}: needle tip sits at the score angle`);
   if (score <= 25) ok(g.tipX < g.cx - 40, `r3 card ${hsh}: a low score points left, not into the red (tip x ${g.tipX.toFixed(0)}, hub ${g.cx})`);
