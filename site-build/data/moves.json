@@ -1,0 +1,23 @@
+{
+  "sources": {
+    "nhs-sitting": { "name": "NHS, Sitting exercises", "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/", "checked": "2026-11-25" },
+    "nhs-flex": { "name": "NHS, Flexibility exercises", "url": "https://www.nhs.uk/live-well/exercise/flexibility-exercises/", "checked": "2026-11-25" },
+    "mayo": { "name": "Mayo Clinic, A guide to basic stretches", "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/stretching/sls-20076525", "checked": "2026-11-25" }
+  },
+  "moves": [
+    { "id": "neck-turn", "name": "Neck turn", "source": "nhs-flex", "why": "The NHS says this is good for neck mobility.",
+      "cue": "Sit up, shoulders down, look ahead. Slowly turn your head toward your left shoulder, only as far as is comfortable. Hold 5 seconds, come back to the middle, then turn right." },
+    { "id": "neck-tilt", "name": "Neck tilt", "source": "nhs-flex", "why": "The NHS says this loosens tight neck muscles.",
+      "cue": "Sit up and look ahead. Hold your left shoulder down with your right hand. Slowly tilt your head to the right. Hold 5 seconds, then swap sides." },
+    { "id": "chest", "name": "Chest opener", "source": "nhs-sitting", "why": "The NHS says this stretch is good for posture.",
+      "cue": "Sit away from the chair back. Pull your shoulders back and down and put your arms out to the sides. Gently push your chest forward and up until you feel a stretch. Hold 5 seconds, relax, repeat." },
+    { "id": "shoulder", "name": "Arm across", "source": "mayo", "why": "Mayo Clinic uses this to keep shoulders flexible.",
+      "cue": "Bring your left arm across your body and hold it with your right arm, above or below the elbow. Hold a few slow breaths, then switch arms." },
+    { "id": "twist", "name": "Seated twist", "source": "nhs-sitting", "why": "The NHS says this keeps the upper back flexible.",
+      "cue": "Sit up with feet flat. Cross your arms and reach for your shoulders. Keep your hips still and turn your upper body left, as far as is comfortable. Hold 5 seconds, then turn right." },
+    { "id": "march", "name": "Seated march", "source": "nhs-sitting", "why": "The NHS says this works the hips and thighs.",
+      "cue": "Sit up without leaning back and hold the sides of the chair. Lift your left knee as far as is comfortable, then put the foot down with control. Swap legs and keep going." },
+    { "id": "side-bend", "name": "Side bend, standing", "source": "nhs-flex", "why": "The NHS says this helps lower back flexibility.",
+      "cue": "Stand up, feet hip-width apart, arms by your sides. Slide your left hand down your side as far as is comfortable. Hold 2 seconds, come up, then the right side." }
+  ]
+}

@@ -1,0 +1,3 @@
+stretchly https://hovancik.net/stretchly/ title="Stretchly - The break time reminder app" third-party requests 0, hosts 0: 
+stretchclock https://www.stretchclock.com/ title="StretchClock: Break Reminder & Office Exercises" third-party requests 10, hosts 2: captcha.mysitearea.com 
+workrave https://workrave.org/ title="Welcome to Workrave · Workrave" third-party requests 6, hosts 4: use.fontawesome.com fonts.googleapis.com cdn.jsdelivr.net fonts.gstatic.com
