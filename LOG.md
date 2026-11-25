@@ -1,4 +1,4 @@
-# DONE 2026-11-25 11:05 AM CT (Gizmo): Y1 hamstring card back on its stick SVG pair (Dash: the painted pair rounds the back, a form cue we should not teach). Shoulder-rolls, knee-hug and calf stay painted. 12 painted pairs in the list now.
+# DONE 2026-11-25 11:05 AM CT (Gizmo): Y1 hamstring card back on its stick SVG pair (Dash: the painted pair rounds the back, a form cue we should not teach). Shoulder-rolls, knee-hug and calf stay painted. 12 painted pairs in the list now. Live on 22d9e34: e2e 175/0, gate 100 / CLS 0 / impeccable 0.
 
 # DONE 2026-11-25 10:45 AM CT (Gizmo): r4 pose art wired locally (11 pairs including the new chest opener). Neck-turn and neck-tilt stay SVG. Local e2e 173/0, local gate 99 / CLS 0 / impeccable 0. Live on 8affe5f: e2e 173/0, gate 100 / CLS 0 / impeccable 0, LCP 1.2 s. Folds and share samples in qa/art-folds/r4/.
 

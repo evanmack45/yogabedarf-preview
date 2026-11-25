@@ -2,7 +2,7 @@
 
 ## Hamstring back to SVG, 2026-11-25 11:05 AM CT
 
-Dash accepted r4 and asked for the hamstring card to return to its stick pair (rounded back). `hamstring` is out of POSE_ART; 12 painted pairs remain (chin-down, chest, shoulder-rolls, shoulder, twist, wrist-down, wrist-circles, ankle, march, knee-hug, calf, quad). The pose-hamstring webp files stay in src/img unused. See live results below once recorded.
+Dash accepted r4 and asked for the hamstring card to return to its stick pair (rounded back). `hamstring` is out of POSE_ART; 12 painted pairs remain (chin-down, chest, shoulder-rolls, shoulder, twist, wrist-down, wrist-circles, ankle, march, knee-hug, calf, quad). The pose-hamstring webp files stay in src/img unused. Live on 22d9e34: e2e **175 passed, 0 failed** (qa/art-folds/r4/e2e-live-hamstring.log; hamstring SVG pair asserted, calf / knee-hug / shoulder-rolls painted pairs asserted). Live gate (qa/art-folds/r4/gate-live-ham/): Lighthouse 100 / 100 / 100 / SEO 63, CLS 0, LCP 1.2 s, impeccable 0 at 390, 1280 and static.
 
 - State: Y1 art pass live on the noindex GitHub Pages preview (forward-fold masthead, stretch panels 1/2/4/5/6, rebuilt share card, og.jpg). Contrast fix from earlier today remains. Not on the custom domain. No DNS, Afternic or registrar change.
 - Preview: https://evanmack45.github.io/yogabedarf-preview/
