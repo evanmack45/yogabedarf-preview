@@ -72,7 +72,7 @@ for (const [w, h] of [[390, 844], [1280, 800]]) {
   await p.click('#skip');
   ok((await p.textContent('#count')) === 'Move 3 of 4', `${tag} next move skips ahead`);
   await p.click('#still');
-  ok((await p.getAttribute('#still', 'aria-pressed')) === 'true' && await p.locator('#stage .pair svg').count() === 2, `${tag} still pictures shows start and stretch side by side`);
+  ok((await p.getAttribute('#still', 'aria-pressed')) === 'true' && (await p.locator('#stage .pair svg').count() === 2 || await p.locator('#stage .pair.art img').count() === 1), `${tag} still pictures shows start and stretch side by side (drawn pair or one art picture)`);
   await p.evaluate(() => document.activeElement.blur()); await p.keyboard.press('Space'); const s1 = await p.textContent('#secs'); await p.clock.runFor(3000);
   ok((await p.textContent('#pause')) === 'Resume' && (await p.textContent('#secs')) === s1, `${tag} space bar pauses`);
   await p.keyboard.press('Space');
@@ -134,6 +134,36 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
   const p = await page(1280, 800);
   await p.goto(base + '#moves'); await p.waitForTimeout(200);
   ok(await p.isHidden('#friend') && new URL(p.url()).hash === '#moves', '#moves anchor is not treated as a bad link');
+  await p.context().close();
+}
+// r3 art: the three art pictures in the moves list, then the stage in still mode, then the share cards
+{
+  const p = await page(390, 844);
+  await p.goto(base + '#moves'); await p.waitForTimeout(500);
+  const imgs = await p.$$eval('.mlist .pair.art img', (els) => els.map((e) => ({ w: e.getAttribute('width'), h: e.getAttribute('height'), lazy: e.loading, fp: e.getAttribute('fetchpriority'), ss: !!e.srcset, alt: e.alt.length > 20 })));
+  ok(imgs.length === 3 && imgs.every((i) => i.w === '1024' && i.h === '740' && i.lazy === 'lazy' && !i.fp && i.ss && i.alt), 'r3: chest, wrist circles and ankle show art in the list (srcset, width/height, lazy, alt, no fetchpriority)');
+  ok((await p.locator('#m-neck-turn .pair svg').count()) === 2, 'r3: neck turn keeps the drawn pair (the art is a chin-lift, not the cited NHS head turn)');
+  ok(/turn your head toward your left shoulder/.test(await p.textContent('#m-neck-turn')), 'r3: neck turn copy is still the cited NHS head turn');
+  await p.locator('#m-ankle img').scrollIntoViewIfNeeded(); await p.waitForTimeout(400);
+  ok(await p.$eval('#m-ankle img', (e) => e.complete && e.naturalWidth > 0), 'r3: lazy art loads when scrolled to');
+  await p.context().close();
+}
+{
+  const p = await page(390, 844, { reducedMotion: 'reduce' });
+  await p.clock.install(); await p.goto(base); await p.click('#start'); await p.clock.runFor(400); await p.click('#skip');
+  ok((await p.textContent('#mname')) === 'Chest opener' && await p.locator('#stage .pair.art img').count() === 1 && await p.$eval('#stage .pair.art img', (e) => e.complete && e.naturalWidth > 0), 'r3: still mode shows the chest-opener art in the stage');
+  await p.context().close();
+}
+for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], ['#r=322d', 100, false], ['#r=0120', 8, true]]) {
+  const p = await page(1280, 800);
+  await p.addInitScript(() => { window.__t = []; window.__img = []; const f = CanvasRenderingContext2D.prototype.fillText, d = CanvasRenderingContext2D.prototype.drawImage; CanvasRenderingContext2D.prototype.fillText = function (t, ...r) { window.__t.push(String(t)); return f.call(this, t, ...r); }; CanvasRenderingContext2D.prototype.drawImage = function (im, ...r) { window.__img.push(im.src ? im.src.slice(0, 60) : 'canvas'); return d.call(this, im, ...r); }; });
+  await p.clock.install(); await p.goto(base + hsh); await p.click('#start'); await p.clock.runFor(61000);
+  const dim = await p.evaluate(async () => { const c = await window.__card(); return [c.width, c.height]; });
+  const t = await p.evaluate(() => window.__t.join('\n')), im = await p.evaluate(() => window.__img.join('\n'));
+  ok(dim[0] === 1080 && dim[1] === 1350 && new RegExp(`My Bedarf is ${score}%\\. Yours\\?`).test(t), `r3 card ${hsh}${odd ? ' (odd link, starts fresh)' : ''}: 1080x1350, says ${score}%`);
+  ok(/share-ground\.webp/.test(im), `r3 card ${hsh}: the screenprint ground is drawn into the canvas`);
+  ok(!/localhost|127\.0\.0\.1/.test(t) && /evanmack45\.github\.io\/yogabedarf-preview\//.test(t), `r3 card ${hsh}: footer uses the canonical URL, no localhost`);
+  ok(p.errs.length === 0, `r3 card ${hsh}: no console errors ${p.errs.join(' ')}`);
   await p.context().close();
 }
 // no JS

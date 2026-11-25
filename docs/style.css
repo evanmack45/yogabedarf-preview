@@ -175,3 +175,6 @@ h1 { font: 800 clamp(40px, 11vw, 84px)/0.95 var(--display); margin: 0; letter-sp
 @media (max-width: 520px) {
   .stretch-row { gap: 4px; }
 }
+
+.pair.art { display: block; }
+.pair.art img { display: block; width: 100%; height: auto; aspect-ratio: 1024 / 740; border-radius: 8px; background: var(--card); }

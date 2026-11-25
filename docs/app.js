@@ -1,5 +1,5 @@
 import { HOURS, NECK, BACK, MOVE_SECONDS, bedarf, band, tier, pickMoves, encode, decode } from './logic.js';
-import { poseAt, stills, peak, svg } from './poses.js';
+import { poseAt, stills, peak, svg, hasArt, artPair } from './poses.js';
 
 const $ = (id) => document.getElementById(id);
 const { moves, sources } = JSON.parse($('moves-data').textContent);
@@ -43,7 +43,7 @@ function drawMove() {
 }
 function drawFigure() {
   const id = plan[i];
-  $('stage').innerHTML = still ? `<div class="pair">${stills(id).map((p) => svg(p)).join('')}</div><p class="stillnote">Start, then stretch</p>` : svg(poseAt(id, t, MOVE_SECONDS), 'big');
+  $('stage').innerHTML = still ? `${hasArt(id) ? artPair(id) : `<div class="pair">${stills(id).map((p) => svg(p)).join('')}</div>`}<p class="stillnote">Start, then stretch</p>` : svg(poseAt(id, t, MOVE_SECONDS), 'big');
   $('stage').classList.toggle('is-still', still);
 }
 const TOTAL = () => plan.length * MOVE_SECONDS * 1000;
@@ -133,38 +133,37 @@ async function card() {
   // Darker ink on the red band only: #173c36 on #e2512e is 3.14:1 (fails WCAG AA for small text).
   // #081816 on #e2512e is 4.73:1. Text on the cream move panel stays C.ink.
   const bandInk = bg === C.red ? C.inkOnRed : C.ink;
-  x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  // Ground: Dash's cream screenprint (4:5, dial and figure top right, empty cream mid, flat bottom strip).
+  // The flat strip is repainted in the score band colour so the colour still carries the score.
+  const STRIP = 1012;
+  x.fillStyle = '#f7ecd6'; x.fillRect(0, 0, W, H);
   try {
-    const art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/og.jpg'; });
-    const dw = 460, dh = 300, dx0 = W - dw - 48, dy0 = 48;
-    x.save();
-    x.beginPath(); x.roundRect(dx0, dy0, dw, dh, 28); x.clip();
-    // right half of the og: figure + dial on cream
-    const sx = art.width * 0.32, sw = art.width * 0.68;
-    x.drawImage(art, sx, 0, sw, art.height, dx0, dy0, dw, dh);
-    x.restore();
+    const art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/share-ground.webp'; });
+    x.drawImage(art, 0, 0, W, H);
   } catch {
-    const dx = 900, dy = 200, dr = 98, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
-    x.fillStyle = C.paper; x.beginPath(); x.arc(dx, dy, dr + 38, Math.PI, 0); x.lineTo(dx + dr + 38, dy + 26); x.lineTo(dx - dr - 38, dy + 26); x.closePath(); x.fill();
-    x.lineWidth = 26;
+    const dx = 800, dy = 300, dr = 150, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
+    x.lineWidth = 40;
     for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(dx, dy, dr, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
     const ang = Math.PI + (s / 100) * Math.PI;
-    x.strokeStyle = C.ink; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 18), dy + Math.sin(ang) * (dr - 18)); x.stroke(); x.lineCap = 'butt';
-    x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 13, 0, 7); x.fill();
+    x.strokeStyle = C.ink; x.lineWidth = 12; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 28), dy + Math.sin(ang) * (dr - 28)); x.stroke(); x.lineCap = 'butt';
+    x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 18, 0, 7); x.fill();
   }
-  x.fillStyle = bandInk; x.textAlign = 'left';
+  x.fillStyle = bg; x.fillRect(0, STRIP, W, H - STRIP);
+  // type on the cream: left of the figure, then the full width under the dial
+  x.fillStyle = C.ink; x.textAlign = 'left';
   x.font = '700 40px "Atkinson Hyperlegible Next"'; x.fillText('My Bedarf today', 72, 112);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need', 72, 156);
-  // the number and the tier
-  x.fillStyle = bandInk;
-  x.font = '800 340px "Bricolage Grotesque"'; x.fillText(`${s}%`, 56, 500);
-  x.font = '800 84px "Bricolage Grotesque"'; let y = 596;
-  for (const l of wrap(x, tr.name, W - 144)) { x.fillText(l, 72, y); y += 84; }
-  x.font = '400 34px "Atkinson Hyperlegible Next"'; y -= 32;
+  let ns = 240; x.font = `800 ${ns}px "Bricolage Grotesque"`;
+  const nw = x.measureText(`${s}%`).width; if (nw > 372) ns = Math.floor((ns * 372) / nw);
+  x.font = `800 ${ns}px "Bricolage Grotesque"`; const nb = 196 + ns * 0.78; x.fillText(`${s}%`, 56, nb);
+  x.font = '800 54px "Bricolage Grotesque"'; let y = nb + 66;
+  for (const l of wrap(x, tr.name, 372)) { x.fillText(l, 72, y); y += 56; }
+  x.font = '400 34px "Atkinson Hyperlegible Next"'; y = Math.max(y, 580) + 26;
   for (const l of wrap(x, tr.line, W - 144)) { x.fillText(l, 72, y); y += 42; }
-  // the four moves
-  const top = Math.max(y + 2, 690), ph = 316;
+  // the four moves, a paper panel that straddles the cream and the band strip
+  const top = 724, ph = 340;
   x.fillStyle = C.paper; x.beginPath(); x.roundRect(48, top, W - 96, ph, 28); x.fill();
+  x.strokeStyle = C.ink; x.lineWidth = 3; x.stroke();
   x.fillStyle = C.ink; x.font = '700 32px "Atkinson Hyperlegible Next"'; x.fillText(finished ? 'The four moves I did' : 'My four moves', 80, top + 56);
   const figs = await Promise.all(plan.map((id) => svgImg(peak(id))));
   const cw = (W - 160) / 4;
@@ -174,10 +173,10 @@ async function card() {
     wrap(x, byId[plan[k]].name, cw - 14).forEach((l, j) => x.fillText(l, cx + cw / 2, top + 296 + j * 28));
     x.textAlign = 'left';
   });
-  // the line people forward
+  // the line people forward, on the band strip
   x.fillStyle = bandInk; x.font = '800 66px "Bricolage Grotesque"'; x.fillText(`My Bedarf is ${s}%. Yours?`, 72, top + ph + 92);
-  x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Same answers, same moves, one minute', 72, top + ph + 140);
-  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(publicFooter(`#${encode(answers, finished)}`), 72, top + ph + 180);
+  x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Same answers, same moves, one minute', 72, top + ph + 138);
+  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(publicFooter(`#${encode(answers, finished)}`), 72, top + ph + 178);
   x.font = '400 22px "Atkinson Hyperlegible Next"'; x.fillText('A playful score, not medical advice. Stop if it hurts.', 72, H - 34);
   return cv;
 }

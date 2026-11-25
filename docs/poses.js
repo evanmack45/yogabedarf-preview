@@ -104,6 +104,17 @@ function mix(a, b, u) {
 export const stills = (id) => [MOVES[id][0][0], MOVES[id][1][0]];
 export const peak = (id) => MOVES[id][1][0];
 
+// Generated art for three moves (start and stretch in one image, 1024x740). Other moves keep the drawn pair.
+// The neck-turn picture was not wired: the art shows a chin-lift and the move is a cited NHS head turn.
+const POSE_ART = {
+  chest: 'Seated figure in profile, then the same figure with shoulders back, arms drawn behind the chair and the chest lifted.',
+  'wrist-circles': 'Seated figure in profile, then the same figure with both forearms held out in front and the wrists loose.',
+  ankle: 'Seated figure in profile, then the same figure with one leg straightened out in front.',
+};
+export const hasArt = (id) => id in POSE_ART;
+export const artPair = (id, lazy = false, sizes = '(max-width: 520px) 240px, 380px') => `<div class="pair art"><img src="img/pose-${id}-512.webp" srcset="img/pose-${id}-512.webp 512w, img/pose-${id}-1024.webp 1024w" sizes="${sizes}" width="1024" height="740" alt="${POSE_ART[id]}"${lazy ? ' loading="lazy"' : ''} decoding="async"></div>`;
+
+
 const f = (n) => Math.round(n * 10) / 10;
 // Presentation attributes are inline so the SVG also draws as a standalone image (the share card).
 const INK = '#173c36', INK2 = '#3f5a53', PAPER = '#f6f9f3', RED = '#e2512e', PEA = '#c9cf7d';

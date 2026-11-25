@@ -3,7 +3,7 @@ import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync, readdirSy
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { HOURS, NECK, BACK, bedarf, band, tier, pickMoves } from './src/logic.js';
-import { MOVES, stills, svg } from './src/poses.js';
+import { MOVES, stills, svg, hasArt, artPair } from './src/poses.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = join(here, '..', 'docs');
@@ -127,7 +127,7 @@ const html = `<!doctype html>
   <h2 id="moves-h">The moves</h2>
   <p class="mlede">${data.moves.length} gentle moves from the NHS and Mayo Clinic. The meter picks four, 15 seconds each, and different answers get different moves. Move slowly, never bounce, and only go as far as is comfortable. Mayo Clinic puts it simply. If you feel pain, you have stretched too far.</p>
   <ol class="mlist">
-  ${data.moves.map((m) => `<li id="m-${m.id}"><div class="pair">${stills(m.id).map((p) => svg(p)).join('')}</div><div><h3>${esc(m.name)}</h3><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${src(m).url}">${esc(src(m).name)}</a></p></div></li>`).join('\n  ')}
+  ${data.moves.map((m) => `<li id="m-${m.id}">${hasArt(m.id) ? artPair(m.id, true, '(max-width: 520px) 240px, 150px') : `<div class="pair">${stills(m.id).map((p) => svg(p)).join('')}</div>`}<div><h3>${esc(m.name)}</h3><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${src(m).url}">${esc(src(m).name)}</a></p></div></li>`).join('\n  ')}
   </ol>
 </section>
 <section class="about" id="about" aria-labelledby="about-h">
