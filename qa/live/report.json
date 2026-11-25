@@ -2,9 +2,7 @@
   {
     "url": "https://evanmack45.github.io/yogabedarf-preview/",
     "viewport": "phone",
-    "issues": [
-      "P1 11 tap targets under 24px"
-    ],
+    "issues": [],
     "shots": [
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__fold.png",
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__scroll025.png",
@@ -14,11 +12,11 @@
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__full.png",
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__reduced-motion.png"
     ],
-    "loadMs": 671,
+    "loadMs": 712,
     "framePacing": {
-      "frames": 249,
+      "frames": 256,
       "p50": 16.699999999999818,
-      "p95": 16.799999999999955,
+      "p95": 16.800000000000182,
       "over50ms": 0
     },
     "dom": {
@@ -27,7 +25,7 @@
       "tinyText": 0,
       "imgsNoAlt": 0,
       "brokenImgs": 0,
-      "smallTapTargets": 11,
+      "smallTapTargets": 0,
       "h1": 1,
       "ogImage": true,
       "canvases": 0,
@@ -54,11 +52,11 @@
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__full.png",
       "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__reduced-motion.png"
     ],
-    "loadMs": 649,
+    "loadMs": 655,
     "framePacing": {
-      "frames": 253,
+      "frames": 250,
       "p50": 16.699999999999818,
-      "p95": 16.700000000000728,
+      "p95": 16.799999999999727,
       "over50ms": 0
     },
     "dom": {
@@ -67,7 +65,7 @@
       "tinyText": 0,
       "imgsNoAlt": 0,
       "brokenImgs": 0,
-      "smallTapTargets": 12,
+      "smallTapTargets": 0,
       "h1": 1,
       "ogImage": true,
       "canvases": 0,
@@ -92,7 +90,7 @@
     },
     "LCP": "0.8 s",
     "CLS": "0",
-    "TBT": "40 ms",
+    "TBT": "0 ms",
     "weight": "Total size was 86 KiB",
     "issues": []
   }

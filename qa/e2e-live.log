@@ -16,8 +16,8 @@ ok   encode and decode round-trip for all 36 answer sets
 ok   every cue is gentle and cites a source
 ok   @390 noindex meta
 ok   @390 for-sale footer
-ok   @390 "Bedarf is German for need" near the top (y 123)
-ok   @390 start button in first screen (798 of 844)
+ok   @390 "Bedarf is German for need" near the top (y 128)
+ok   @390 start button in first screen (802 of 844)
 ok   @390 no sideways scroll
 ok   @390 starts at 8%, Low Bedarf
 ok   @390 safety line by the start button
@@ -44,8 +44,8 @@ ok   @390 no third-party requests
 ok   @390 no console errors 
 ok   @1280 noindex meta
 ok   @1280 for-sale footer
-ok   @1280 "Bedarf is German for need" near the top (y 171)
-ok   @1280 start button in first screen (591 of 800)
+ok   @1280 "Bedarf is German for need" near the top (y 176)
+ok   @1280 start button in first screen (596 of 800)
 ok   @1280 no sideways scroll
 ok   @1280 starts at 8%, Low Bedarf
 ok   @1280 safety line by the start button
