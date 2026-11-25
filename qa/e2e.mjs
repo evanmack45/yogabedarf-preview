@@ -152,7 +152,8 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
 }
 {
   const p = await page(390, 844, { reducedMotion: 'reduce' });
-  await p.clock.install(); await p.goto(base); await p.click('#start'); await p.clock.runFor(400); await p.click('#skip');
+  await p.goto(base); await p.click('#start'); await p.waitForTimeout(500); await p.click('#skip');
+  await p.waitForFunction(() => document.querySelector('#mname')?.textContent === 'Chest opener' && document.querySelector('#stage .pair.art img')?.complete && document.querySelector('#stage .pair.art img')?.naturalWidth > 0, { timeout: 8000 });
   ok((await p.textContent('#mname')) === 'Chest opener' && await p.locator('#stage .pair.art img').count() === 1 && await p.$eval('#stage .pair.art img', (e) => e.complete && e.naturalWidth > 0), 'r4: still mode shows the chest-opener art (arms out to the sides)');
   await p.context().close();
 }

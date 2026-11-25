@@ -36,7 +36,10 @@ Eleven r4 pose pairs are on the moves list and in the stage, including `y1-r4-ch
 - CUT, keep the stick SVG (2): neck-turn (the art turns the whole torso, not just the head — Dash: do not ship); neck-tilt (not made). side-bend has no r4 art and stays SVG. wrist-circles and ankle stay on the r3 pairs.
 - Local e2e (qa/e2e.mjs): **173 passed, 0 failed**. Start button still in the first screen at 390, 360×640 and 375×667. Chest art is in the list and in still-mode. Neck turn and neck tilt stay SVG.
 - Local gate (qa/local-r4/): Lighthouse **99 / 100 / 100 / SEO 66** (noindex), CLS 0, LCP 2.0 s. Impeccable 0 at 390, 1280 and static. Phone and desktop folds viewed; start button is in the first screen.
-- Live e2e / live gate / live folds: pending a GitHub Pages deploy. The 10:11 AM start-button commit d4c6b0b is still `errored` from the morning Pages outage (Actions still a partial outage at 10:45 AM CT). noindex kept; no DNS or go-live.
+- Live preview is on 8affe5f (Pages built; the morning d4c6b0b 500s resolved with this deploy).
+- Live e2e (qa/art-folds/r4/e2e-live.log): **173 passed, 0 failed**. Start button in the first screen at 390 (787 of 844), 360×640, 375×667 and 1280. Chest art in the list and in still-mode.
+- Live gate (qa/art-folds/r4/gate-live/): Lighthouse **100 / 100 / 100 / SEO 63**, CLS 0, LCP 1.2 s. Impeccable 0 at 390, 1280 and static.
+- Live captures (viewed): qa/art-folds/r4/live-home-{390,1280}.png, live-moves-* (11 shipped pairs plus neck-turn and neck-tilt SVGs), live-stage-chest-{390,1280}.png, share-{r000,r321d,r322d,r0120-odd}.png. noindex kept; no DNS or go-live.
 
 ## Start button in the first screen, 2026-11-25 10:11 AM CT
 
