@@ -16,15 +16,48 @@ export function band(score) {
   return { key: 'max', label: 'Maximum Bedarf', line: 'Fully crumbled. Go gently.' };
 }
 
-const ORDER = ['neck-turn', 'neck-tilt', 'chest', 'shoulder', 'twist', 'march', 'side-bend'];
+// Head-to-toe order. Standing moves come last, after the seated ones.
+export const ORDER = ['chin-down', 'neck-turn', 'neck-tilt', 'shoulder-rolls', 'chest', 'shoulder', 'twist', 'wrist-down', 'wrist-circles', 'ankle', 'march', 'knee-hug', 'hamstring', 'side-bend', 'calf', 'quad'];
+export const STANDING = ['side-bend', 'calf', 'quad'];
+const POOLS = {
+  neck: ['neck-turn', 'chin-down', 'neck-tilt'],
+  upper: ['chest', 'twist', 'shoulder', 'shoulder-rolls'],
+  hands: ['wrist-circles', 'wrist-down'],
+  // Legs by hours sitting. Longer sitting brings in the standing moves.
+  legs: [['ankle', 'march'], ['march', 'knee-hug', 'ankle'], ['hamstring', 'calf', 'knee-hug', 'quad'], ['quad', 'side-bend', 'calf', 'hamstring']],
+};
 
-// Four moves sized to the answers: the three upper-body moves that fit best,
-// then one move for the legs (standing up after the longest sits). Head-to-toe order.
+// Four moves sized to the answers. Stiffer neck means more neck moves, tighter back means
+// more upper-body moves, longer sitting brings in bigger leg moves. Each answer set also turns the
+// pools to a different start, so neighbouring answers get visibly different sets.
 export function pickMoves({ h, n, b }) {
-  const w = { 'neck-turn': 1 + n * 2, 'neck-tilt': n ? n * 2 + 0.5 : 0, chest: 1.2 + b * 2, shoulder: b ? b * 2 : 0, twist: 1 + b * 2 - 0.6 };
-  const upper = ORDER.filter((id) => w[id] > 0).sort((a, c) => w[c] - w[a] || ORDER.indexOf(a) - ORDER.indexOf(c)).slice(0, MOVES_PER_SET - 1);
-  const legs = h >= 3 ? 'side-bend' : 'march';
-  return ORDER.filter((id) => upper.includes(id) || id === legs);
+  const key = h * 9 + n * 3 + b, taken = { neck: 0, upper: 0, hands: 0, legs: 0 };
+  const pool = (c) => (c === 'legs' ? POOLS.legs[h] : POOLS[c]);
+  const want = ['legs', 'upper'];
+  if (n >= 1) want.push('neck');
+  if (n === 2) want.push('neck');
+  if (b === 2) want.push('upper');
+  if (h >= 2) want.push('legs');
+  want.push('hands', ...(b === 0 ? ['neck', 'legs', 'upper'] : ['upper', 'neck', 'legs']));
+  const out = [];
+  for (const c of want) {
+    if (out.length === MOVES_PER_SET) break;
+    const ps = pool(c), id = ps[(key + taken[c] * 2 + (c === 'upper' ? n : c === 'neck' ? b : 0)) % ps.length];
+    taken[c]++;
+    if (!out.includes(id) && !(STANDING.includes(id) && out.some((x) => STANDING.includes(x)))) out.push(id);
+  }
+  for (const id of ORDER) if (out.length < MOVES_PER_SET && !out.includes(id) && !STANDING.includes(id)) out.push(id);
+  return ORDER.filter((id) => out.includes(id));
+}
+
+// Funny but kind names for the score, for the result card.
+export function tier(score) {
+  if (score < 15) return { name: 'Freshly oiled hinge', line: 'Barely any Bedarf. Stretch anyway and show off a little.' };
+  if (score < 35) return { name: 'Slightly crumpled', line: 'Nothing a minute cannot smooth out.' };
+  if (score < 55) return { name: 'Chair adjacent', line: 'You and the chair are getting close. Time for a little space.' };
+  if (score < 75) return { name: 'Part human, part chair', line: 'The chair is winning. Gently take yourself back.' };
+  if (score < 90) return { name: 'Desk shaped', line: 'Your spine has opinions today. Go slowly.' };
+  return { name: 'Fully fossilized', line: 'Ancient, majestic and very ready for a stretch.' };
 }
 
 // Link state: #r=<hours><neck><back>, plus "d" once the 60 seconds are done.

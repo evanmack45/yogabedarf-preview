@@ -1,6 +1,10 @@
 ok   score stays 0 to 100, max 100, min 8
-ok   every answer set gives 4 distinct moves with one for the legs
-ok   all 7 moves can be picked
+ok   16 moves (15 or more)
+ok   every answer set gives 4 distinct moves, at least one for the legs, at most one standing
+ok   all 36 answer sets get a different set of four
+ok   changing any one answer swaps at least one move (252 changes, 2.5 moves swapped on average)
+ok   a standing move always comes last
+ok   all 16 moves can be picked
 ok   decode rejects #r=
 ok   decode rejects #r=4
 ok   decode rejects #r=400
@@ -16,8 +20,8 @@ ok   encode and decode round-trip for all 36 answer sets
 ok   every cue is gentle and cites a source
 ok   @390 noindex meta
 ok   @390 for-sale footer
-ok   @390 "Bedarf is German for need" near the top (y 123)
-ok   @390 start button in first screen (798 of 844)
+ok   @390 "Bedarf is German for need" near the top (y 128)
+ok   @390 start button in first screen (802 of 844)
 ok   @390 no sideways scroll
 ok   @390 starts at 8%, Low Bedarf
 ok   @390 safety line by the start button
@@ -36,7 +40,7 @@ ok   @390 space bar pauses
 ok   @390 60 seconds end on the done screen with #r=321d
 ok   @390 done screen shows the meter
 ok   @390 result card PNG 1080x1350 (bedarf-94.png)
-ok   @390 copy link holds the result
+ok   @390 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? http://localhost:8946/#r=321d)
 ok   @390 measure again returns to the meter
 ok   @390 Escape stops a session
 ok   @390 no storage, cookies, camera or mic
@@ -44,8 +48,8 @@ ok   @390 no third-party requests
 ok   @390 no console errors 
 ok   @1280 noindex meta
 ok   @1280 for-sale footer
-ok   @1280 "Bedarf is German for need" near the top (y 171)
-ok   @1280 start button in first screen (591 of 800)
+ok   @1280 "Bedarf is German for need" near the top (y 176)
+ok   @1280 start button in first screen (596 of 800)
 ok   @1280 no sideways scroll
 ok   @1280 starts at 8%, Low Bedarf
 ok   @1280 safety line by the start button
@@ -64,12 +68,14 @@ ok   @1280 space bar pauses
 ok   @1280 60 seconds end on the done screen with #r=321d
 ok   @1280 done screen shows the meter
 ok   @1280 result card PNG 1080x1350 (bedarf-94.png)
-ok   @1280 copy link holds the result
+ok   @1280 copy gives a share line plus the link (My Bedarf is 94%. Fully fossilized, apparently. Yours? http://localhost:8946/#r=321d)
 ok   @1280 measure again returns to the meter
 ok   @1280 Escape stops a session
 ok   @1280 no storage, cookies, camera or mic
 ok   @1280 no third-party requests 
 ok   @1280 no console errors 
+ok   hidden tab for 20 s after 1 s lands on move 2 with 9 s left ({"count":"Move 2 of 4","secs":"9","done":false})
+ok   hidden tab past the end shows the done screen on return ({"count":"Move 1 of 4","secs":"15","done":true})
 ok   reduced motion: still pictures, nothing animates
 ok   reduced motion: the needle does not sweep
 ok   reduced motion: the timer still counts
@@ -87,4 +93,4 @@ ok   no JS: says the timer needs JavaScript
 ok   no camera or mic code; page says so
 ok   robots.txt disallows all
 
-88 passed, 0 failed
+94 passed, 0 failed

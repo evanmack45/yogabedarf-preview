@@ -1,12 +1,18 @@
-import { HOURS, NECK, BACK, MOVE_SECONDS, bedarf, band, pickMoves, encode, decode } from './logic.js';
-import { poseAt, stills, svg } from './poses.js';
+import { HOURS, NECK, BACK, MOVE_SECONDS, bedarf, band, tier, pickMoves, encode, decode } from './logic.js';
+import { poseAt, stills, peak, svg } from './poses.js';
 
 const $ = (id) => document.getElementById(id);
 const { moves, sources } = JSON.parse($('moves-data').textContent);
 const byId = Object.fromEntries(moves.map((m) => [m.id, m]));
+const list = (a) => `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`;
 const reduce = matchMedia('(prefers-reduced-motion: reduce)');
 let still = reduce.matches;
-let answers = { h: 0, n: 0, b: 0 }, plan = [], i = 0, t = 0, running = false, last = 0, raf = 0, finished = false;
+let answers = { h: 0, n: 0, b: 0 }, plan = [], i = 0, t = 0, running = false, raf = 0, finished = false;
+// Wall-clock timer: time comes from timestamps, not from counting frames, so a background
+// tab (where frames stop) still lands on the right move when you come back.
+let base = 0, runStart = 0, backstop = 0;
+const now = () => performance.now();
+const elapsed = () => base + (running ? now() - runStart : 0);
 
 function read() {
   const f = new FormData($('qs'));
@@ -18,9 +24,9 @@ function showMeter() {
   const s = bedarf(answers), bd = band(s);
   $('meter').style.setProperty('--v', s);
   $('meter').dataset.band = bd.key;
-  $('score').textContent = s; $('band').textContent = bd.label; $('bandline').textContent = bd.line;
+  $('score').textContent = s; $('band').textContent = bd.label; $('bandline').textContent = `${tier(s).name}. ${tier(s).line}`;
   plan = pickMoves(answers);
-  $('plan').textContent = plan.map((id) => byId[id].name).join(', ');
+  $('plan').textContent = list(plan.map((id) => byId[id].name));
 }
 
 $('qs').addEventListener('change', () => { read(); showMeter(); history.replaceState(null, '', `#${encode(answers, false)}`); $('friend').hidden = true; });
@@ -32,7 +38,7 @@ function drawMove() {
   $('count').textContent = `Move ${i + 1} of ${plan.length}`;
   $('mname').textContent = m.name; $('cue').textContent = m.cue; $('why').textContent = m.why;
   $('msrc').href = s.url; $('msrc').textContent = s.name;
-  $('live').textContent = `Move ${i + 1} of ${plan.length}: ${m.name}. ${m.cue}`;
+  $('live').textContent = `Move ${i + 1} of ${plan.length}, ${m.name}. ${m.cue}`;
   drawFigure();
 }
 function drawFigure() {
@@ -40,34 +46,44 @@ function drawFigure() {
   $('stage').innerHTML = still ? `<div class="pair">${stills(id).map((p) => svg(p)).join('')}</div><p class="stillnote">Start, then stretch</p>` : svg(poseAt(id, t, MOVE_SECONDS), 'big');
   $('stage').classList.toggle('is-still', still);
 }
-function tick(now) {
-  if (!running) return;
-  const dt = Math.min(0.5, (now - last) / 1000); last = now; t += dt;
-  if (t >= MOVE_SECONDS) { next(); if (!running) return; }
+const TOTAL = () => plan.length * MOVE_SECONDS * 1000;
+// Puts the screen where the clock says we are: which move, how many seconds left.
+function sync() {
+  if (finished || $('session').hidden) return;
+  const e = elapsed();
+  if (e >= TOTAL()) { finish(); return; }
+  const idx = Math.floor(e / (MOVE_SECONDS * 1000));
+  t = (e - idx * MOVE_SECONDS * 1000) / 1000;
+  if (idx !== i) { i = idx; drawMove(); }
   const left = Math.max(1, Math.ceil(MOVE_SECONDS - t));
   if ($('secs').textContent !== String(left)) $('secs').textContent = left;
-  $('bar').style.width = `${((i * MOVE_SECONDS + t) / (plan.length * MOVE_SECONDS)) * 100}%`;
+  $('bar').style.width = `${(e / TOTAL()) * 100}%`;
   if (!still) drawFigure();
-  raf = requestAnimationFrame(tick);
 }
-function play() { running = true; last = performance.now(); $('pause').textContent = 'Pause'; raf = requestAnimationFrame(tick); }
-function pause() { running = false; cancelAnimationFrame(raf); $('pause').textContent = 'Resume'; }
+function tick() { if (!running) return; sync(); if (running) raf = requestAnimationFrame(tick); }
+function arm() { clearTimeout(backstop); if (running) backstop = setTimeout(sync, TOTAL() - elapsed() + 50); }
+function play() { running = true; runStart = now(); $('pause').textContent = 'Pause'; cancelAnimationFrame(raf); raf = requestAnimationFrame(tick); arm(); }
+function pause() { base = elapsed(); running = false; cancelAnimationFrame(raf); clearTimeout(backstop); $('pause').textContent = 'Resume'; }
 function next() {
-  i += 1; t = 0;
-  if (i >= plan.length) { finish(); return; }
-  $('secs').textContent = MOVE_SECONDS; drawMove();
+  base = Math.min(TOTAL(), (i + 1) * MOVE_SECONDS * 1000); if (running) runStart = now();
+  if (base >= TOTAL()) { finish(); return; }
+  $('secs').textContent = MOVE_SECONDS; sync(); arm();
 }
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible' || !running) return;
+  sync(); cancelAnimationFrame(raf); if (running) raf = requestAnimationFrame(tick);
+});
 function start() {
-  read(); showMeter(); i = 0; t = 0; finished = false;
+  read(); showMeter(); i = 0; t = 0; base = 0; finished = false; $('friend').hidden = true;
   view('session'); drawMove(); $('secs').textContent = MOVE_SECONDS; $('bar').style.width = '0%';
   $('mname').focus({ preventScroll: true }); $('app').scrollIntoView({ block: 'start' });
   play();
 }
 function finish() {
-  running = false; cancelAnimationFrame(raf); finished = true;
+  running = false; cancelAnimationFrame(raf); clearTimeout(backstop); finished = true;
   const s = bedarf(answers);
-  $('d-score').textContent = `${s}%`;
-  $('d-plan').textContent = `You did: ${plan.map((id) => byId[id].name).join(', ')}.`;
+  $('d-score').textContent = `${s}%`; $('d-tier').textContent = tier(s).name; $('d-share').textContent = shareLine();
+  $('d-plan').textContent = `You did ${list(plan.map((id) => byId[id].name))}.`;
   history.replaceState(null, '', `#${encode(answers, true)}`);
   const copy = $('meter').cloneNode(true); copy.removeAttribute('id'); copy.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id')); copy.classList.add('mini');
   $('done-meter').replaceChildren(copy);
@@ -89,36 +105,60 @@ $('again').addEventListener('click', () => { view('setup'); history.replaceState
 
 // Share
 const link = () => `${location.origin}${location.pathname}#${encode(answers, finished)}`;
+const shareLine = () => `My Bedarf is ${bedarf(answers)}%. ${tier(bedarf(answers)).name}, apparently. Yours?`;
 $('copy').addEventListener('click', async () => {
-  const url = link();
-  try { await navigator.clipboard.writeText(url); $('msg').textContent = 'Link copied. It holds your three answers and that you finished, nothing else.'; }
-  catch { $('msg').textContent = `Copy this link: ${url}`; }
+  const text = `${shareLine()} ${link()}`;
+  try { await navigator.clipboard.writeText(text); $('msg').textContent = 'Copied. Paste it to a coworker. The link holds your three answers, nothing else.'; }
+  catch { $('msg').textContent = `Copy this and send it on. ${text}`; }
 });
 
+const svgImg = (p) => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg(p).replace('<svg ', '<svg width="400" height="440" '))}`; });
+function wrap(x, text, maxW) {
+  const words = text.split(' '), lines = []; let cur = '';
+  for (const w of words) { const t = cur ? `${cur} ${w}` : w; if (x.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }
+  return [...lines, cur];
+}
+const CARD = { sage: '#8db596', pea: '#c9cf7d', mus: '#e7b43c', red: '#e2512e', ink: '#173c36', paper: '#f6f9f3' };
 async function card() {
   await Promise.all([document.fonts.load('800 80px "Bricolage Grotesque"'), document.fonts.load('400 30px "Atkinson Hyperlegible Next"'), document.fonts.load('700 30px "Atkinson Hyperlegible Next"')]);
   const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
-  const x = cv.getContext('2d'), s = bedarf(answers), bd = band(s);
-  const C = { paper: '#e2eadf', ink: '#173c36', red: '#e2512e', mus: '#e7b43c', sage: '#8db596', pea: '#c9cf7d' };
-  x.fillStyle = C.paper; x.fillRect(0, 0, W, H);
-  x.fillStyle = C.ink; x.fillRect(0, 0, W, 16);
-  x.textAlign = 'center'; x.fillStyle = C.ink;
-  x.font = '800 92px "Bricolage Grotesque"'; x.fillText('Bedarf-o-Meter', W / 2, 150);
-  x.font = '400 32px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need.', W / 2, 205);
-  const cx = W / 2, cy = 600, r = 300, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
-  x.lineWidth = 56; x.lineCap = 'butt';
-  for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(cx, cy, r, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
+  const x = cv.getContext('2d'), s = bedarf(answers), bd = band(s), tr = tier(s), C = CARD;
+  const bg = { low: C.sage, some: C.pea, high: C.mus, max: C.red }[bd.key];
+  x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  x.fillStyle = C.ink; x.textAlign = 'left';
+  x.font = '700 40px "Atkinson Hyperlegible Next"'; x.fillText('My Bedarf today', 72, 112);
+  x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need', 72, 156);
+  // mini dial
+  const dx = 900, dy = 200, dr = 98, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
+  x.fillStyle = C.paper; x.beginPath(); x.arc(dx, dy, dr + 38, Math.PI, 0); x.lineTo(dx + dr + 38, dy + 26); x.lineTo(dx - dr - 38, dy + 26); x.closePath(); x.fill();
+  x.lineWidth = 26;
+  for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(dx, dy, dr, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
   const ang = Math.PI + (s / 100) * Math.PI;
-  x.strokeStyle = C.ink; x.lineWidth = 14; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx, cy); x.lineTo(cx + Math.cos(ang) * (r - 50), cy + Math.sin(ang) * (r - 50)); x.stroke();
-  x.fillStyle = C.ink; x.beginPath(); x.arc(cx, cy, 26, 0, 7); x.fill();
-  x.font = '800 190px "Bricolage Grotesque"'; x.fillText(`${s}%`, cx, cy + 200);
-  x.font = '700 48px "Atkinson Hyperlegible Next"'; x.fillStyle = bd.key === 'max' || bd.key === 'high' ? '#b8361a' : C.ink; x.fillText(bd.label, cx, cy + 270);
-  x.fillStyle = C.ink; x.font = '400 34px "Atkinson Hyperlegible Next"';
-  x.fillText(finished ? 'I did the 60 seconds:' : 'My 60 seconds:', cx, cy + 360);
-  x.font = '700 34px "Atkinson Hyperlegible Next"'; x.fillText(plan.map((id) => byId[id].name).join(', '), cx, cy + 410);
-  x.font = '400 30px "Atkinson Hyperlegible Next"'; x.fillText('Your turn? Same answers, same moves:', cx, 1160);
-  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(`${location.host}${location.pathname}#${encode(answers, finished)}`, cx, 1205);
-  x.font = '400 24px "Atkinson Hyperlegible Next"'; x.fillStyle = '#4a5f59'; x.fillText('A playful score, not medical advice. Stop if it hurts.', cx, 1290);
+  x.strokeStyle = C.ink; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 18), dy + Math.sin(ang) * (dr - 18)); x.stroke(); x.lineCap = 'butt';
+  x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 13, 0, 7); x.fill();
+  // the number and the tier
+  x.font = '800 340px "Bricolage Grotesque"'; x.fillText(`${s}%`, 56, 500);
+  x.font = '800 84px "Bricolage Grotesque"'; let y = 596;
+  for (const l of wrap(x, tr.name, W - 144)) { x.fillText(l, 72, y); y += 84; }
+  x.font = '400 34px "Atkinson Hyperlegible Next"'; y -= 32;
+  for (const l of wrap(x, tr.line, W - 144)) { x.fillText(l, 72, y); y += 42; }
+  // the four moves
+  const top = Math.max(y + 2, 690), ph = 316;
+  x.fillStyle = C.paper; x.beginPath(); x.roundRect(48, top, W - 96, ph, 28); x.fill();
+  x.fillStyle = C.ink; x.font = '700 32px "Atkinson Hyperlegible Next"'; x.fillText(finished ? 'The four moves I did' : 'My four moves', 80, top + 56);
+  const figs = await Promise.all(plan.map((id) => svgImg(peak(id))));
+  const cw = (W - 160) / 4;
+  figs.forEach((im, k) => {
+    const cx = 80 + k * cw; x.drawImage(im, cx + (cw - 180) / 2, top + 74, 180, 198);
+    x.textAlign = 'center'; x.font = '700 25px "Atkinson Hyperlegible Next"';
+    wrap(x, byId[plan[k]].name, cw - 14).forEach((l, j) => x.fillText(l, cx + cw / 2, top + 296 + j * 28));
+    x.textAlign = 'left';
+  });
+  // the line people forward
+  x.fillStyle = C.ink; x.font = '800 66px "Bricolage Grotesque"'; x.fillText(`My Bedarf is ${s}%. Yours?`, 72, top + ph + 92);
+  x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Same answers, same moves, one minute', 72, top + ph + 140);
+  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(`${location.host}${location.pathname}#${encode(answers, finished)}`, 72, top + ph + 180);
+  x.font = '400 22px "Atkinson Hyperlegible Next"'; x.fillText('A playful score, not medical advice. Stop if it hurts.', 72, H - 34);
   return cv;
 }
 $('save').addEventListener('click', async () => {

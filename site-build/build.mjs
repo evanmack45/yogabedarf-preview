@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync, readdirSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { HOURS, NECK, BACK, bedarf, band, pickMoves } from './src/logic.js';
+import { HOURS, NECK, BACK, bedarf, band, tier, pickMoves } from './src/logic.js';
 import { MOVES, stills, svg } from './src/poses.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -20,6 +20,7 @@ for (const m of data.moves) {
   if (!/comfortable|gently|slowly|few slow breaths/i.test(m.cue)) fail(`cue not gentle enough on ${m.id}`);
 }
 if (Object.keys(MOVES).length !== data.moves.length) fail('pose without a move');
+if (data.moves.length < 15) fail('fewer than 15 moves');
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const byId = Object.fromEntries(data.moves.map((m) => [m.id, m]));
@@ -64,13 +65,13 @@ const html = `<!doctype html>
       <svg class="gauge" viewBox="0 0 240 140" aria-hidden="true">${arc(0, 25, 'z1')}${arc(25, 50, 'z2')}${arc(50, 75, 'z3')}${arc(75, 100, 'z4')}<g class="ticks">${ticks}</g><g class="needle"><line x1="120" y1="124" x2="120" y2="40"/><circle cx="120" cy="124" r="9"/></g></svg>
       <p class="score"><span id="score">${s0}</span><small>%</small></p>
       <p class="band" id="band">${band(s0).label}</p>
-      <p class="bandline" id="bandline">${band(s0).line}</p>
+      <p class="bandline" id="bandline">${tier(s0).name}. ${tier(s0).line}</p>
     </div>
     <form class="qs" id="qs">
       ${group('h', 'Sitting today', HOURS)}
       ${group('n', 'Your neck', NECK)}
       ${group('b', 'Back and shoulders', BACK)}
-      <p class="plan">Your 60 seconds: <span id="plan">${plan0.map((id) => esc(byId[id].name)).join(', ')}</span>.</p>
+      <p class="plan">Your four moves are <span id="plan">${((a) => `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`)(plan0.map((id) => esc(byId[id].name)))}</span>.</p>
       <button class="btn go" id="start" type="submit">Start my 60 seconds</button>
       <p class="safe">${SAFE}</p>
     </form>
@@ -98,8 +99,9 @@ const html = `<!doctype html>
     <div class="done-meter" id="done-meter" aria-hidden="true"></div>
     <div class="done-text">
     <h2 tabindex="-1" id="done-h">60 seconds, done.</h2>
-    <p class="was">Your Bedarf was <b id="d-score"></b>. Bedarf now: lower, we hope. The meter cannot check.</p>
+    <p class="was">Your Bedarf was <b id="d-score"></b>, which makes you <b id="d-tier"></b>. It is lower now, we hope. The meter cannot check.</p>
     <p class="dplan" id="d-plan"></p>
+    <p class="sharepre" id="d-share"></p>
     <div class="ctrls">
       <button class="btn go" type="button" id="save">Save result card</button>
       <button class="btn" type="button" id="copy">Copy link for a coworker</button>
@@ -108,20 +110,20 @@ const html = `<!doctype html>
     <p class="msg" id="msg" aria-live="polite"></p>
     </div>
   </section>
-  <noscript><p class="msg">The meter and timer need JavaScript. All seven moves are listed below, so you can still do them.</p></noscript>
+  <noscript><p class="msg">The meter and timer need JavaScript. All ${data.moves.length} moves are listed below, so you can still do them.</p></noscript>
 </main>
 <section class="moves" id="moves" aria-labelledby="moves-h">
   <h2 id="moves-h">The moves</h2>
-  <p class="mlede">Seven gentle moves from the NHS and Mayo Clinic. The meter picks four, about 15 seconds each. Move slowly, never bounce, and only go as far as is comfortable. Mayo Clinic puts it simply: if you feel pain, you have stretched too far.</p>
+  <p class="mlede">${data.moves.length} gentle moves from the NHS and Mayo Clinic. The meter picks four, 15 seconds each, and different answers get different moves. Move slowly, never bounce, and only go as far as is comfortable. Mayo Clinic puts it simply. If you feel pain, you have stretched too far.</p>
   <ol class="mlist">
   ${data.moves.map((m) => `<li id="m-${m.id}"><div class="pair">${stills(m.id).map((p) => svg(p)).join('')}</div><div><h3>${esc(m.name)}</h3><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${src(m).url}">${esc(src(m).name)}</a></p></div></li>`).join('\n  ')}
   </ol>
 </section>
 <section class="about" id="about" aria-labelledby="about-h">
   <h2 id="about-h">About the meter</h2>
-  <p>The Bedarf score is a playful guess from your three taps, not a health measurement. More hours sitting and a stiffer neck or back push it up. It always picks three upper-body moves and one for the legs.</p>
+  <p>The Bedarf score is a playful guess from your three taps, not a health measurement. More hours sitting and a stiffer neck or back push it up. A stiffer neck brings more neck moves, a tighter back more upper-body moves, and longer sitting bigger leg moves, some of them standing. All 36 answer sets get a different set of four.</p>
   <p>Nothing you tap leaves your browser. There is no camera, no microphone, no account, no cookies and no trackers. The link you can copy holds only your three answers and whether you finished.</p>
-  <p>Sources, checked 25 November 2026: ${Object.values(data.sources).map((s) => `<a href="${s.url}">${esc(s.name)}</a>`).join(', ')}.</p>
+  <p>Sources, all checked on 25 November 2026, are ${Object.values(data.sources).map((s) => `<a href="${s.url}">${esc(s.name)}</a>`).join(', ')}.</p>
 </section>
 <footer class="foot">
   <p>${SAFE}</p>

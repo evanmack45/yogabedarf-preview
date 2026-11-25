@@ -1,23 +1,158 @@
 {
-  "sources": {
-    "nhs-sitting": { "name": "NHS, Sitting exercises", "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/", "checked": "2026-11-25" },
-    "nhs-flex": { "name": "NHS, Flexibility exercises", "url": "https://www.nhs.uk/live-well/exercise/flexibility-exercises/", "checked": "2026-11-25" },
-    "mayo": { "name": "Mayo Clinic, A guide to basic stretches", "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/stretching/sls-20076525", "checked": "2026-11-25" }
+ "sources": {
+  "nhs-sitting": {
+   "name": "NHS, Sitting exercises",
+   "url": "https://www.nhs.uk/live-well/exercise/sitting-exercises/",
+   "checked": "2026-11-25"
   },
-  "moves": [
-    { "id": "neck-turn", "name": "Neck turn", "source": "nhs-flex", "why": "The NHS says this is good for neck mobility.",
-      "cue": "Sit up, shoulders down, look ahead. Slowly turn your head toward your left shoulder, only as far as is comfortable. Hold 5 seconds, come back to the middle, then turn right." },
-    { "id": "neck-tilt", "name": "Neck tilt", "source": "nhs-flex", "why": "The NHS says this loosens tight neck muscles.",
-      "cue": "Sit up and look ahead. Hold your left shoulder down with your right hand. Slowly tilt your head to the right. Hold 5 seconds, then swap sides." },
-    { "id": "chest", "name": "Chest opener", "source": "nhs-sitting", "why": "The NHS says this stretch is good for posture.",
-      "cue": "Sit away from the chair back. Pull your shoulders back and down and put your arms out to the sides. Gently push your chest forward and up until you feel a stretch. Hold 5 seconds, relax, repeat." },
-    { "id": "shoulder", "name": "Arm across", "source": "mayo", "why": "Mayo Clinic uses this to keep shoulders flexible.",
-      "cue": "Bring your left arm across your body and hold it with your right arm, above or below the elbow. Hold a few slow breaths, then switch arms." },
-    { "id": "twist", "name": "Seated twist", "source": "nhs-sitting", "why": "The NHS says this keeps the upper back flexible.",
-      "cue": "Sit up with feet flat. Cross your arms and reach for your shoulders. Keep your hips still and turn your upper body left, as far as is comfortable. Hold 5 seconds, then turn right." },
-    { "id": "march", "name": "Seated march", "source": "nhs-sitting", "why": "The NHS says this works the hips and thighs.",
-      "cue": "Sit up without leaning back and hold the sides of the chair. Lift your left knee as far as is comfortable, then put the foot down with control. Swap legs and keep going." },
-    { "id": "side-bend", "name": "Side bend, standing", "source": "nhs-flex", "why": "The NHS says this helps lower back flexibility.",
-      "cue": "Stand up, feet hip-width apart, arms by your sides. Slide your left hand down your side as far as is comfortable. Hold 2 seconds, come up, then the right side." }
-  ]
+  "nhs-flex": {
+   "name": "NHS, Flexibility exercises",
+   "url": "https://www.nhs.uk/live-well/exercise/flexibility-exercises/",
+   "checked": "2026-11-25"
+  },
+  "mayo": {
+   "name": "Mayo Clinic, A guide to basic stretches",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/stretching/sls-20076525",
+   "checked": "2026-11-25"
+  },
+  "nhs-warmup": {
+   "name": "NHS, How to warm up before exercising",
+   "url": "https://www.nhs.uk/live-well/exercise/how-to-warm-up-before-exercising/",
+   "checked": "2026-11-25"
+  },
+  "mayo-neck": {
+   "name": "Mayo Clinic, Neck stretches for the workplace",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/neck-stretches/vid-20084697",
+   "checked": "2026-11-25"
+  },
+  "mayo-forearm": {
+   "name": "Mayo Clinic, Wrist and forearm stretches for the workplace",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/forearm-stretches/vid-20084698",
+   "checked": "2026-11-25"
+  },
+  "mayo-seated": {
+   "name": "Mayo Clinic, Seated stretches for the workplace",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/lower-back-stretches/vid-20084700",
+   "checked": "2026-11-25"
+  },
+  "mayo-standing": {
+   "name": "Mayo Clinic, Standing stretches for the workplace",
+   "url": "https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/standing-stretches/vid-20084701",
+   "checked": "2026-11-25"
+  }
+ },
+ "moves": [
+  {
+   "id": "chin-down",
+   "name": "Chin to chest",
+   "source": "mayo-neck",
+   "why": "Mayo Clinic suggests it for a neck stiff from desk work.",
+   "cue": "Sit tall with your shoulders level. Slowly lower your chin toward your chest until you feel a gentle stretch at the back of your neck. Hold a few slow breaths, then lift your head slowly."
+  },
+  {
+   "id": "neck-turn",
+   "name": "Neck turn",
+   "source": "nhs-flex",
+   "why": "The NHS says this is good for neck mobility.",
+   "cue": "Sit up, shoulders down, look ahead. Slowly turn your head toward your left shoulder, only as far as is comfortable. Hold 5 seconds, come back to the middle, then turn right."
+  },
+  {
+   "id": "neck-tilt",
+   "name": "Neck tilt",
+   "source": "nhs-flex",
+   "why": "The NHS says this loosens tight neck muscles.",
+   "cue": "Sit up and look ahead. Hold your left shoulder down with your right hand. Slowly tilt your head to the right. Hold 5 seconds, then swap sides."
+  },
+  {
+   "id": "shoulder-rolls",
+   "name": "Shoulder rolls",
+   "source": "nhs-warmup",
+   "why": "The NHS uses shoulder rolls in its basic warm-up.",
+   "cue": "Let your arms hang loose by your sides. Slowly roll your shoulders forwards 5 times, then backwards 5 times."
+  },
+  {
+   "id": "chest",
+   "name": "Chest opener",
+   "source": "nhs-sitting",
+   "why": "The NHS says this stretch is good for posture.",
+   "cue": "Sit away from the chair back. Pull your shoulders back and down and put your arms out to the sides. Gently push your chest forward and up until you feel a stretch. Hold 5 seconds, relax, repeat."
+  },
+  {
+   "id": "shoulder",
+   "name": "Arm across",
+   "source": "mayo",
+   "why": "Mayo Clinic uses this to keep shoulders flexible.",
+   "cue": "Bring your left arm across your body and hold it with your right arm, above or below the elbow. Hold a few slow breaths, then switch arms."
+  },
+  {
+   "id": "twist",
+   "name": "Seated twist",
+   "source": "nhs-sitting",
+   "why": "The NHS says this keeps the upper back flexible.",
+   "cue": "Sit up with feet flat. Cross your arms and reach for your shoulders. Keep your hips still and turn your upper body left, as far as is comfortable. Hold 5 seconds, then turn right."
+  },
+  {
+   "id": "wrist-down",
+   "name": "Wrist stretch",
+   "source": "mayo-forearm",
+   "why": "Mayo Clinic says this helps forearms that ache from typing.",
+   "cue": "Hold one arm out in front of you, palm down. Bend the hand down and gently pull it toward you with your other hand. Hold a few slow breaths, then swap hands."
+  },
+  {
+   "id": "wrist-circles",
+   "name": "Wrist circles",
+   "source": "mayo-forearm",
+   "why": "Mayo Clinic says this can help blood flow to your hands.",
+   "cue": "Hold both arms out in front of you with loose fists. Slowly circle your wrists outward a few times, then inward."
+  },
+  {
+   "id": "ankle",
+   "name": "Ankle stretch",
+   "source": "nhs-sitting",
+   "why": "The NHS says this helps ankle flexibility and lowers the risk of a blood clot.",
+   "cue": "Sit up and hold the side of the chair. Straighten one leg with the foot off the floor. Point your toes away, then gently back toward you. Swap legs."
+  },
+  {
+   "id": "march",
+   "name": "Seated march",
+   "source": "nhs-sitting",
+   "why": "The NHS says this works the hips and thighs.",
+   "cue": "Sit up without leaning back and hold the sides of the chair. Lift your left knee as far as is comfortable, then put the foot down with control. Swap legs and keep going."
+  },
+  {
+   "id": "knee-hug",
+   "name": "Knee to chest",
+   "source": "mayo-seated",
+   "why": "Mayo Clinic says you feel this in the lower back and the top of the buttock.",
+   "cue": "Sit tall. Bring one knee toward your chest, hold the back of your thigh and gently pull it in. Keep your back straight. Hold a few slow breaths, then swap legs."
+  },
+  {
+   "id": "hamstring",
+   "name": "Seated hamstring stretch",
+   "source": "mayo-seated",
+   "why": "Mayo Clinic uses this for the back of the thigh after long sitting.",
+   "cue": "Sit on the front edge of a chair without wheels. Straighten one leg with the heel on the floor. Keep your back straight and gently lean forward from the hips. Swap legs."
+  },
+  {
+   "id": "side-bend",
+   "name": "Side bend, standing",
+   "source": "nhs-flex",
+   "why": "The NHS says this helps lower back flexibility.",
+   "cue": "Stand up, feet hip-width apart, arms by your sides. Slide your left hand down your side as far as is comfortable. Hold 2 seconds, come up, then the right side."
+  },
+  {
+   "id": "calf",
+   "name": "Calf stretch",
+   "source": "nhs-flex",
+   "why": "The NHS says this loosens tight calf muscles.",
+   "cue": "Stand and put your hands on a wall or desk. Step one leg back and keep it straight with the heel down. Gently bend the front knee. Swap legs."
+  },
+  {
+   "id": "quad",
+   "name": "Standing thigh stretch",
+   "source": "mayo-standing",
+   "why": "Mayo Clinic uses this to ease the front of the thigh.",
+   "cue": "Stand and hold a desk or chair. Gently bring one ankle up toward your bottom, knees side by side, back straight. Hold your trouser leg if the ankle is hard to reach. Swap legs."
+  }
+ ]
 }

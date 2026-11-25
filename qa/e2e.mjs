@@ -1,6 +1,7 @@
 // End-to-end checks for the Bedarf-o-Meter. Usage: node e2e.mjs <base url>
 import { chromium } from 'playwright';
 import { readFileSync } from 'fs';
+import { hiddenTab } from './hidden-tab.mjs';
 const base = process.argv[2] || 'http://localhost:8946/';
 const origin = new URL(base).origin;
 const L = await import(new URL('../site-build/src/logic.js', import.meta.url));
@@ -12,7 +13,13 @@ const b = await chromium.launch({ channel: 'chrome' });
 // Logic
 const all = []; for (let h = 0; h < 4; h++) for (let n = 0; n < 3; n++) for (let bb = 0; bb < 3; bb++) all.push({ h, n, b: bb });
 ok(all.every((a) => { const s = L.bedarf(a); return s >= 0 && s <= 100; }) && L.bedarf({ h: 3, n: 2, b: 2 }) === 100 && L.bedarf({ h: 0, n: 0, b: 0 }) === 8, 'score stays 0 to 100, max 100, min 8');
-ok(all.every((a) => { const p = L.pickMoves(a); return p.length === 4 && new Set(p).size === 4 && (p.includes('march') || p.includes('side-bend')); }), 'every answer set gives 4 distinct moves with one for the legs');
+const LEGS = ['ankle', 'march', 'knee-hug', 'hamstring', 'side-bend', 'calf', 'quad'];
+ok(data.moves.length >= 15, `${data.moves.length} moves (15 or more)`);
+ok(all.every((a) => { const p = L.pickMoves(a); return p.length === 4 && new Set(p).size === 4 && p.some((id) => LEGS.includes(id)) && p.filter((id) => L.STANDING.includes(id)).length <= 1; }), 'every answer set gives 4 distinct moves, at least one for the legs, at most one standing');
+ok(new Set(all.map((a) => L.pickMoves(a).join())).size === 36, 'all 36 answer sets get a different set of four');
+{ let pairs = 0, same = 0, changed = 0; for (const a of all) for (const k of ['h', 'n', 'b']) for (let v = 0; v < (k === 'h' ? 4 : 3); v++) { if (v === a[k]) continue; const A = L.pickMoves(a), C = L.pickMoves({ ...a, [k]: v }); const d = A.filter((x) => !C.includes(x)).length; pairs++; changed += d; if (!d) same++; }
+  ok(same === 0, `changing any one answer swaps at least one move (${pairs} changes, ${(changed / pairs).toFixed(1)} moves swapped on average)`); }
+ok(all.every((a) => L.pickMoves(a).every((id, i, p) => !L.STANDING.includes(id) || i === p.length - 1)), 'a standing move always comes last');
 const used = new Set(all.flatMap((a) => L.pickMoves(a))); ok(used.size === data.moves.length, `all ${data.moves.length} moves can be picked`);
 for (const h of ['#r=', '#r=4', '#r=400', '#r=033', '#r=0000', '#r=012x', '#r=012dd', '#r=-12', '#garbage', '#r=0 1 2', '#R=012']) ok(L.decode(h) === null, `decode rejects ${h}`);
 ok(all.every((a) => JSON.stringify(L.decode('#' + L.encode(a, true))) === JSON.stringify({ a, done: true })), 'encode and decode round-trip for all 36 answer sets');
@@ -79,7 +86,7 @@ for (const [w, h] of [[390, 844], [1280, 800]]) {
   await p.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin });
   await p.click('#copy'); await p.clock.runFor(100);
   const clip = await p.evaluate(() => navigator.clipboard.readText().catch(() => ''));
-  ok(clip.endsWith('#r=321d') || /Copy this link/.test(await p.textContent('#msg')), `${tag} copy link holds the result`);
+  ok((/^My Bedarf is 94%\. Fully fossilized, apparently\. Yours\? http/.test(clip) && clip.endsWith('#r=321d')) || /Copy this and send it on/.test(await p.textContent('#msg')), `${tag} copy gives a share line plus the link (${clip})`);
   await p.click('#again');
   ok(await p.isVisible('#setup') && new URL(p.url()).hash === '#r=321', `${tag} measure again returns to the meter`);
   // stop and escape
@@ -91,6 +98,13 @@ for (const [w, h] of [[390, 844], [1280, 800]]) {
   await p.context().close();
 }
 
+// background tab: frames stop while hidden, the clock does not
+{
+  const r = await hiddenTab(b, base, 20000);
+  ok(r.count === 'Move 2 of 4' && r.secs === '9' && !r.done, `hidden tab for 20 s after 1 s lands on move 2 with 9 s left (${JSON.stringify(r)})`);
+  const r2 = await hiddenTab(b, base, 70000);
+  ok(r2.done, `hidden tab past the end shows the done screen on return (${JSON.stringify(r2)})`);
+}
 // reduced motion
 {
   const p = await page(390, 844, { reducedMotion: 'reduce' });
