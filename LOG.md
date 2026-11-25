@@ -146,3 +146,8 @@ The 7:36 AM phone hero crop had put `#start` at 1147 on an 844-tall screen. Phon
 
 Chest-opener r3 art unhooked: hands behind the back vs the cited "arms out to the sides." Stick SVG restored; copy unchanged; r4 redo requested. e2e 174/0 including the new short-phone viewports. Local gate PASS, Lighthouse 99, CLS 0, impeccable 0 (qa/fold-start/). Live e2e and preview push follow this entry.
 
+## 2026-11-25 ~5:15 PM CT: share-card needle matches the score, gauge uncropped
+
+Barker's live check: the default 8% card ("Freshly oiled hinge") had a needle in the red, and the red segment was cut off at the right edge. Reproduced on https://yogabedarf.com/#r=000 (pinned Chrome). Root cause: `share-ground.webp` is a static illustration with a cropped dial and a needle painted in the red. When that image loaded, the card drew it and never painted a live needle. The fallback path already had the correct mapping (`π + score/100 * π`, same as the on-page SVG: 0% at 9 o'clock, 100% at 3 o'clock) but only ran if the image failed.
+
+Fix: cover the baked dial, draw a full live gauge (hub at 800,220 radius, right edge at 1051 of 1080), and set the needle from the score. The folding figure is clipped back on top. e2e asserts angle-versus-value, an uncropped bounding box, and tip direction on low (8%), mid (50%), high (94%, 100%) and an odd broken hash that starts fresh at 8%. Local e2e 199/0.

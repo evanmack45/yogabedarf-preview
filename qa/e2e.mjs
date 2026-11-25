@@ -38,7 +38,7 @@ for (const [w, h] of [[390, 844], [360, 640], [375, 667], [1280, 800]]) {
   const tag = `@${w}`, p = await page(w, h);
   await p.clock.install();
   await p.goto(base); await p.waitForTimeout(300);
-  ok(await p.locator('meta[name=robots][content="noindex,nofollow"]').count() === 1, `${tag} noindex meta`);
+  ok((await p.locator('meta[name=robots]').count()) === 0, `${tag} no noindex meta (the live site may be indexed)`);
   ok((await p.getAttribute('.foot a', 'href')) === 'https://www.afternic.com/domain/yogabedarf.com' && /for sale/.test(await p.textContent('.foot')), `${tag} for-sale footer`);
   const gl = await p.locator('.gloss').boundingBox();
   ok(/Bedarf is German for need/.test((await p.textContent('.gloss')).replace(/\s+/g, ' ')) && gl.y < h * 0.4, `${tag} "Bedarf is German for need" near the top (y ${Math.round(gl.y)})`);
@@ -159,7 +159,7 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
   ok((await p.textContent('#mname')) === 'Chest opener' && await p.locator('#stage .pair.art img').count() === 1 && await p.$eval('#stage .pair.art img', (e) => e.complete && e.naturalWidth > 0), 'r4: still mode shows the chest-opener art (arms out to the sides)');
   await p.context().close();
 }
-for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], ['#r=322d', 100, false], ['#r=0120', 8, true]]) {
+for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=200', 50, false], ['#r=321d', 94, false], ['#r=322d', 100, false], ['#r=0120', 8, true]]) {
   const p = await page(1280, 800);
   await p.addInitScript(() => { window.__t = []; window.__img = []; const f = CanvasRenderingContext2D.prototype.fillText, d = CanvasRenderingContext2D.prototype.drawImage; CanvasRenderingContext2D.prototype.fillText = function (t, ...r) { window.__t.push(String(t)); return f.call(this, t, ...r); }; CanvasRenderingContext2D.prototype.drawImage = function (im, ...r) { window.__img.push(im.src ? im.src.slice(-60) : 'canvas'); return d.call(this, im, ...r); }; });
   await p.clock.install(); await p.goto(base + hsh); await p.click('#start'); await p.clock.runFor(61000);
@@ -168,7 +168,16 @@ for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], [
   const t = await p.evaluate(() => window.__t.join('\n')), im = await p.evaluate(() => window.__img.join('\n'));
   ok(dim[0] === 1080 && dim[1] === 1350 && new RegExp(`My Bedarf is ${score}%\\. Yours\\?`).test(t), `r3 card ${hsh}${odd ? ' (odd link, starts fresh)' : ''}: 1080x1350, says ${score}%`);
   ok(/share-ground\.webp/.test(im), `r3 card ${hsh}: the screenprint ground is drawn into the canvas`);
-  ok(!/localhost|127\.0\.0\.1/.test(t) && /evanmack45\.github\.io\/yogabedarf-preview\//.test(t), `r3 card ${hsh}: footer uses the canonical URL, no localhost`);
+  const lay = await p.evaluate(async () => window.__cardLayout());
+  const want = Math.PI + (score / 100) * Math.PI, g = lay.gauge;
+  ok(Math.abs(g.angle - want) < 0.02, `r3 card ${hsh}: needle angle ${g.angle.toFixed(3)} matches ${score}% (want ${want.toFixed(3)})`);
+  ok(g.left >= 8 && g.right <= 1080 - 8 && g.top >= 8, `r3 card ${hsh}: gauge is uncropped (L${g.left.toFixed(0)} R${g.right.toFixed(0)} T${g.top.toFixed(0)})`);
+  const tip = Math.atan2(g.tipY - g.cy, g.tipX - g.cx);
+  ok(Math.abs(((tip - want + Math.PI * 3) % (Math.PI * 2)) - Math.PI) < 0.05, `r3 card ${hsh}: needle tip sits at the score angle`);
+  if (score <= 25) ok(g.tipX < g.cx - 40, `r3 card ${hsh}: a low score points left, not into the red (tip x ${g.tipX.toFixed(0)}, hub ${g.cx})`);
+  if (score >= 75) ok(g.tipX > g.cx + 40, `r3 card ${hsh}: a high score points right (tip x ${g.tipX.toFixed(0)})`);
+  if (score === 50) ok(Math.abs(g.tipX - g.cx) < 16 && g.tipY < g.cy, `r3 card ${hsh}: mid score points up`);
+  ok(!/localhost|127\.0\.0\.1/.test(t) && /yogabedarf\.com/.test(t), `r3 card ${hsh}: footer uses the canonical URL, no localhost`);
   ok(p.errs.length === 0, `r3 card ${hsh}: no console errors ${p.errs.join(' ')}`);
   await p.context().close();
 }
@@ -182,7 +191,7 @@ for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], [
   ok(!/getUserMedia|camera\.|navigator\.geolocation/.test(readFileSync(new URL('../docs/app.js', import.meta.url), 'utf8')) && /no camera, no microphone/.test(html), 'no camera or mic code; page says so');
   await p.context().close();
 }
-{ const r = await (await fetch(base + 'robots.txt')).text(); ok(/Disallow: \//.test(r), 'robots.txt disallows all'); }
+{ const r = await (await fetch(base + 'robots.txt')).text(); ok(/Allow: \//.test(r) && /Sitemap:/.test(r), 'robots.txt allows all and names the sitemap'); }
 await b.close();
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

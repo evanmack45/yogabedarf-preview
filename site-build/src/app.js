@@ -125,6 +125,31 @@ function wrap(x, text, maxW) {
   return [...lines, cur];
 }
 const CARD = { sage: '#8db596', pea: '#c9cf7d', mus: '#e7b43c', red: '#e2512e', ink: '#173c36', inkOnRed: '#081816', paper: '#f6f9f3' };
+// 0% at the left (9 o'clock), 100% at the right (3 o'clock), same as the on-page SVG needle.
+const needleAngle = (score) => Math.PI + (Math.max(0, Math.min(100, Number(score) || 0)) / 100) * Math.PI;
+function drawGauge(ctx, score, dx, dy, dr) {
+  const C = CARD, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
+  const stroke = Math.round(dr * 0.26);
+  ctx.save();
+  ctx.lineCap = 'butt';
+  ctx.lineWidth = stroke;
+  for (const [a, b, c] of segs) { ctx.strokeStyle = c; ctx.beginPath(); ctx.arc(dx, dy, dr, needleAngle(a), needleAngle(b)); ctx.stroke(); }
+  ctx.strokeStyle = C.ink; ctx.lineWidth = 7;
+  for (const t of [25, 50, 75]) {
+    const a = needleAngle(t);
+    ctx.beginPath();
+    ctx.moveTo(dx + Math.cos(a) * (dr - stroke * 0.55), dy + Math.sin(a) * (dr - stroke * 0.55));
+    ctx.lineTo(dx + Math.cos(a) * (dr + stroke * 0.45), dy + Math.sin(a) * (dr + stroke * 0.45));
+    ctx.stroke();
+  }
+  const ang = needleAngle(score), tipR = dr - stroke * 0.15;
+  ctx.strokeStyle = C.ink; ctx.lineWidth = Math.round(dr * 0.09); ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(dx, dy); ctx.lineTo(dx + Math.cos(ang) * tipR, dy + Math.sin(ang) * tipR); ctx.stroke();
+  ctx.fillStyle = C.ink; ctx.beginPath(); ctx.arc(dx, dy, Math.round(dr * 0.12), 0, 7); ctx.fill();
+  ctx.restore();
+  const pad = stroke / 2 + 2;
+  return { score, angle: ang, cx: dx, cy: dy, r: dr, tipR, tipX: dx + Math.cos(ang) * tipR, tipY: dy + Math.sin(ang) * tipR, left: dx - dr - pad, right: dx + dr + pad, top: dy - dr - pad, bottom: dy + pad };
+}
 async function card() {
   await Promise.all([document.fonts.load('800 80px "Bricolage Grotesque"'), document.fonts.load('400 30px "Atkinson Hyperlegible Next"'), document.fonts.load('700 30px "Atkinson Hyperlegible Next"')]);
   const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
@@ -133,21 +158,22 @@ async function card() {
   // Darker ink on the red band only: #173c36 on #e2512e is 3.14:1 (fails WCAG AA for small text).
   // #081816 on #e2512e is 4.73:1. Text on the cream move panel stays C.ink.
   const bandInk = bg === C.red ? C.inkOnRed : C.ink;
-  // Ground: Dash's cream screenprint (4:5, dial and figure top right, empty cream mid, flat bottom strip).
-  // The flat strip is repainted in the score band colour so the colour still carries the score.
+  // Ground: Dash's cream screenprint (figure top right, cream mid, flat bottom strip).
+  // The baked dial on that art is cropped and its needle sits in the red, so we
+  // cover it and draw a full live dial whose needle tracks the score.
   const STRIP = 1012;
   x.fillStyle = '#f7ecd6'; x.fillRect(0, 0, W, H);
+  let art = null;
   try {
-    const art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/share-ground.webp'; });
+    art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/share-ground.webp'; });
     x.drawImage(art, 0, 0, W, H);
-  } catch {
-    const dx = 800, dy = 300, dr = 150, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
-    x.lineWidth = 40;
-    for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(dx, dy, dr, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
-    const ang = Math.PI + (s / 100) * Math.PI;
-    x.strokeStyle = C.ink; x.lineWidth = 12; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 28), dy + Math.sin(ang) * (dr - 28)); x.stroke(); x.lineCap = 'butt';
-    x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 18, 0, 7); x.fill();
+    x.fillStyle = '#f7ecd6'; x.beginPath(); x.arc(955, 421, 380, 0, 7); x.fill();
+  } catch { art = null; }
+  const gauge = drawGauge(x, s, 800, 400, 220);
+  if (art) {
+    x.save(); x.beginPath(); x.rect(400, 70, 230, 500); x.clip(); x.drawImage(art, 0, 0, W, H); x.restore();
   }
+  lastLayout = { gauge, score: s, W, H };
   x.fillStyle = bg; x.fillRect(0, STRIP, W, H - STRIP);
   // type on the cream: left of the figure, then the full width under the dial
   x.fillStyle = C.ink; x.textAlign = 'left';
@@ -189,6 +215,8 @@ $('save').addEventListener('click', async () => {
   } catch { $('msg').textContent = 'Could not make the image here. The link still works.'; }
 });
 window.__card = card;
+window.__cardLayout = async () => { await card(); return lastLayout; };
+let lastLayout = null;
 
 // Load state from the link
 function fromHash() {
