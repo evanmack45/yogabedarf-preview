@@ -1,3 +1,29 @@
+# DONE 2026-11-25 3:06 AM CT (Gizmo): Y1 v2 live (commit d0ecb11)
+
+## v2 (2026-11-25)
+
+Moves. 16 gentle moves, each cited with its link (data in site-build/data/moves.json, build fails under 15). Sources, all checked 25 Nov 2026:
+NHS Sitting exercises, NHS Flexibility exercises, NHS How to warm up, Mayo Clinic Stretching basics, Mayo Clinic neck, forearm, seated (lower back) and standing stretches for the workplace. Safety lines kept on every screen.
+
+Picker. Key from all three answers plus rotation. All 36 answer sets give a distinct set of four, all 16 moves get used, and every one-answer change swaps at least one move (2.5 on average). At most one standing move, always last.
+
+Timer. Wall-clock now (performance.now deltas, resync on visibilitychange, setTimeout backstop). Proof with a simulated hidden tab (qa/hidden-tab.mjs, fake clock):
+old live, away 20 s and 70 s, both still Move 1 of 4 at 14 s (qa/hidden-tab-before.log).
+new, away 20 s gives Move 2 of 4 at 9 s, away 70 s gives done (qa/hidden-tab-after.log, qa/hidden-tab-live.log).
+
+Card. qa/card.png (1080x1350, 94%), samples qa/card-{000,112,211,321}-v3.png. Full-bleed band colour, giant %, a kind joke tier (Freshly oiled hinge to Fully fossilized), mini dial, the four moves as figures, the forward line "My Bedarf is X%. Yours?" and the #r= link. Copy link text reads "My Bedarf is 94%. Fully fossilized, apparently. Yours? <link>", previewed on the done screen.
+Benchmark.
+C2 rank card. Strong number hierarchy and a fun fact, but cream panel and lots of small stats. Y1 borrows the one huge number and drops the stats.
+Spotify Wrapped. Full-bleed colour, one big stat, an identity label you want to own. Y1 copies all three (band colour, %, tier name).
+Receiptify. A familiar list format as the artifact. Y1 uses the "four moves I did" strip as its list, with figures.
+Weaker than Wrapped in that there is one card, not a story, and the red band has dark text at about 3.5 to 1, fine for the huge type, borderline for the small lines.
+
+Figures. Chest opener is now a side view, seated twist and neck turn show turned shoulders and a turn arrow.
+
+QA. Local and live e2e 94 passed 0 failed (qa/e2e-local.log, qa/e2e-live.log). Gate 390 PASS no P1, Lighthouse 100/100/100, CLS 0 (qa/live-v2). Gate 1280 PASS no P1, Lighthouse 100/100/100, CLS 0 (qa/live-v2-1280). SEO 60 is the noindex. impeccable 0 on home, session and done at 390 and 1280, and on live home. md5 match for index.html, app.js, logic.js, poses.js, style.css. cname null. GIFs qa/bedarf-390.gif, qa/bedarf-1280.gif.
+
+Still breaks. Old #r= links give the new move set for the same answers. The hidden-tab test is simulated with a fake clock, not a real backgrounded tab. Shoulder rolls reads as a plain sit in a still. og.png unchanged from v1.
+
 # DONE 2026-11-25 2:19 AM CT (Gizmo): Y1 Bedarf-o-Meter live at https://evanmack45.github.io/yogabedarf-preview/
 
 Noindex GitHub Pages preview on the default github.io address (Pages cname is null). No custom domain, DNS, Afternic or registrar change. Nothing posted, nobody messaged.

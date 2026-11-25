@@ -1,0 +1,2 @@
+away 20 s after 1 s: {"count":"Move 2 of 4","secs":"9","done":false}
+away 70 s after 1 s: {"count":"Move 1 of 4","secs":"14","done":true}
