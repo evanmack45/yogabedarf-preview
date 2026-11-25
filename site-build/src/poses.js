@@ -105,6 +105,7 @@ export const stills = (id) => [MOVES[id][0][0], MOVES[id][1][0]];
 export const peak = (id) => MOVES[id][1][0];
 
 // Generated art for three moves (start and stretch in one image, 1024x740). Other moves keep the drawn pair.
+// hamstring is not listed: the r4 pair rounds the back, a form cue we should not teach (Dash 11:00 AM); the stick SVG stays.
 // neck-turn is not listed: the r4 pair turns the whole torso, not just the head. neck-tilt was not made. Both stay as stick SVGs.
 const POSE_ART = {
   'chin-down': 'A faceless figure sitting tall, then lowering the chin toward the chest.',
@@ -117,7 +118,6 @@ const POSE_ART = {
   ankle: 'Seated figure in profile, then the same figure with one leg straightened out in front.',
   march: 'A faceless figure sitting upright, then lifting one knee as in a seated march.',
   'knee-hug': 'A faceless figure sitting tall, then hugging one knee toward the chest.',
-  hamstring: 'A faceless figure sitting upright, then sitting forward with one leg straight and the heel on the floor.',
   calf: 'A faceless figure standing with hands on a chair, then stepping one straight leg back, heel down.',
   quad: 'A faceless figure standing and holding a chair, then drawing one ankle up toward the body.',
 };

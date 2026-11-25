@@ -1,5 +1,9 @@
 # yogabedarf.com STATUS
 
+## Hamstring back to SVG, 2026-11-25 11:05 AM CT
+
+Dash accepted r4 and asked for the hamstring card to return to its stick pair (rounded back). `hamstring` is out of POSE_ART; 12 painted pairs remain (chin-down, chest, shoulder-rolls, shoulder, twist, wrist-down, wrist-circles, ankle, march, knee-hug, calf, quad). The pose-hamstring webp files stay in src/img unused. See live results below once recorded.
+
 - State: Y1 art pass live on the noindex GitHub Pages preview (forward-fold masthead, stretch panels 1/2/4/5/6, rebuilt share card, og.jpg). Contrast fix from earlier today remains. Not on the custom domain. No DNS, Afternic or registrar change.
 - Preview: https://evanmack45.github.io/yogabedarf-preview/
 - Repo: https://github.com/evanmack45/yogabedarf-preview (Pages from main /docs, cname null)

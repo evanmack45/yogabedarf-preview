@@ -141,11 +141,13 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
   const p = await page(390, 844);
   await p.goto(base + '#moves'); await p.waitForTimeout(500);
   const imgs = await p.$$eval('.mlist .pair.art img', (els) => els.map((e) => ({ w: e.getAttribute('width'), h: e.getAttribute('height'), lazy: e.loading, fp: e.getAttribute('fetchpriority'), ss: !!e.srcset, alt: e.alt.length > 20 })));
-  ok(imgs.length === 13 && imgs.every((i) => i.w === '1024' && i.h === '740' && i.lazy === 'lazy' && !i.fp && i.ss && i.alt), 'r4: 13 moves show art in the list (srcset, width/height, lazy, alt, no fetchpriority)');
+  ok(imgs.length === 12 && imgs.every((i) => i.w === '1024' && i.h === '740' && i.lazy === 'lazy' && !i.fp && i.ss && i.alt), 'r4: 12 moves show art in the list (srcset, width/height, lazy, alt, no fetchpriority)');
   ok((await p.locator('#m-chest .pair.art img').count()) === 1 && /put your arms out to the sides/.test(await p.textContent('#m-chest')), 'r4: chest opener uses the new arms-out-to-the-sides pair; cited NHS cue unchanged');
   ok((await p.locator('#m-neck-turn .pair svg').count()) === 2, 'r4: neck turn keeps the stick pair (the art turns the torso with the head)');
   ok(/turn your head toward your left shoulder/.test(await p.textContent('#m-neck-turn')), 'r4: neck turn copy is still the cited NHS head turn');
   ok((await p.locator('#m-neck-tilt .pair svg').count()) === 2, 'r4: neck tilt keeps the stick pair (no tilt art was made)');
+  ok((await p.locator('#m-hamstring .pair svg').count()) === 2 && (await p.locator('#m-hamstring img').count()) === 0, 'r4: hamstring keeps the stick pair (painted pair rounds the back)');
+  ok((await p.locator('#m-calf .pair.art img, #m-knee-hug .pair.art img, #m-shoulder-rolls .pair.art img').count()) === 3, 'r4: calf, knee-hug and shoulder-rolls keep their painted pairs');
   await p.locator('#m-ankle img').scrollIntoViewIfNeeded(); await p.waitForTimeout(400);
   ok(await p.$eval('#m-ankle img', (e) => e.complete && e.naturalWidth > 0), 'r3: lazy art loads when scrolled to');
   await p.context().close();

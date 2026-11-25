@@ -1,3 +1,5 @@
+# DONE 2026-11-25 11:05 AM CT (Gizmo): Y1 hamstring card back on its stick SVG pair (Dash: the painted pair rounds the back, a form cue we should not teach). Shoulder-rolls, knee-hug and calf stay painted. 12 painted pairs in the list now.
+
 # DONE 2026-11-25 10:45 AM CT (Gizmo): r4 pose art wired locally (11 pairs including the new chest opener). Neck-turn and neck-tilt stay SVG. Local e2e 173/0, local gate 99 / CLS 0 / impeccable 0. Live on 8affe5f: e2e 173/0, gate 100 / CLS 0 / impeccable 0, LCP 1.2 s. Folds and share samples in qa/art-folds/r4/.
 
 Eleven r4 keeps were copy-checked against the cited cues in moves.json before wiring. Chest now matches "arms out to the sides" and replaces the unhooked r3 pair. Neck-turn was cut: the art turns the torso with the head (Dash rule). Neck-tilt was not made. Local gate: qa/local-r4/. Start-button fix from 10:11 AM CT is live with this deploy (d4c6b0b had 500'd during the morning Pages outage).
