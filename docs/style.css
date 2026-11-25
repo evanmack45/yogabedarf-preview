@@ -15,7 +15,7 @@ a:hover { color: var(--redtext); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 .top { display: flex; justify-content: space-between; align-items: center; max-width: 1120px; margin: 0 auto; padding: 14px 20px; border-bottom: 3px solid var(--ink); }
-.brand { font: 800 22px/1 var(--display); text-decoration: none; letter-spacing: -0.01em; }
+.brand { font: 800 22px/1.2 var(--display); text-decoration: none; letter-spacing: -0.01em; }
 .brand span { color: var(--redtext); }
 .toplink { font-size: 15px; }
 
@@ -156,3 +156,4 @@ h1 { font: 800 clamp(40px, 11vw, 84px)/0.95 var(--display); margin: 0; letter-sp
 @media (min-width: 900px) {
   .done { grid-template-columns: 340px 1fr; gap: 48px; align-items: start; }
 }
+.why a, .about a, .foot a, .toplink, .brand { display: inline-block; min-height: 24px; padding-top: 1px; }

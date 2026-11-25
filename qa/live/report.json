@@ -1,0 +1,99 @@
+[
+  {
+    "url": "https://evanmack45.github.io/yogabedarf-preview/",
+    "viewport": "phone",
+    "issues": [
+      "P1 11 tap targets under 24px"
+    ],
+    "shots": [
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__fold.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__scroll025.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__scroll050.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__scroll075.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__scroll100.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__full.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__phone__reduced-motion.png"
+    ],
+    "loadMs": 671,
+    "framePacing": {
+      "frames": 249,
+      "p50": 16.699999999999818,
+      "p95": 16.799999999999955,
+      "over50ms": 0
+    },
+    "dom": {
+      "overflowX": 0,
+      "wide": [],
+      "tinyText": 0,
+      "imgsNoAlt": 0,
+      "brokenImgs": 0,
+      "smallTapTargets": 11,
+      "h1": 1,
+      "ogImage": true,
+      "canvases": 0,
+      "fonts": [
+        "\"Bricolage Grotesque\"",
+        "\"Atkinson Hyperlegible Next\""
+      ],
+      "title": "Bedarf-o-Meter: how much stretch do you need?"
+    },
+    "axe": [],
+    "consoleErrors": [],
+    "badRequests": []
+  },
+  {
+    "url": "https://evanmack45.github.io/yogabedarf-preview/",
+    "viewport": "desktop",
+    "issues": [],
+    "shots": [
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__fold.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__scroll025.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__scroll050.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__scroll075.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__scroll100.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__full.png",
+      "/workspace/sites/yogabedarf.com/qa/live/evanmack45-github-io-yogabedarf-preview__desktop__reduced-motion.png"
+    ],
+    "loadMs": 649,
+    "framePacing": {
+      "frames": 253,
+      "p50": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "over50ms": 0
+    },
+    "dom": {
+      "overflowX": 0,
+      "wide": [],
+      "tinyText": 0,
+      "imgsNoAlt": 0,
+      "brokenImgs": 0,
+      "smallTapTargets": 12,
+      "h1": 1,
+      "ogImage": true,
+      "canvases": 0,
+      "fonts": [
+        "\"Bricolage Grotesque\"",
+        "\"Atkinson Hyperlegible Next\""
+      ],
+      "title": "Bedarf-o-Meter: how much stretch do you need?"
+    },
+    "axe": [],
+    "consoleErrors": [],
+    "badRequests": []
+  },
+  {
+    "url": "https://evanmack45.github.io/yogabedarf-preview/",
+    "viewport": "lighthouse-mobile",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 60
+    },
+    "LCP": "0.8 s",
+    "CLS": "0",
+    "TBT": "40 ms",
+    "weight": "Total size was 86 KiB",
+    "issues": []
+  }
+]
