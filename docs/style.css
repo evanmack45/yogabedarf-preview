@@ -158,3 +158,19 @@ h1 { font: 800 clamp(40px, 11vw, 84px)/0.95 var(--display); margin: 0; letter-sp
 }
 .why a, .about a, .foot a, .toplink, .brand { display: inline-block; min-height: 24px; padding-top: 1px; }
 .sharepre { margin: 14px 0 4px; padding: 12px 16px; background: var(--card); border: 2px dashed var(--ink); border-radius: 12px; font-weight: 700; max-width: 34em; }
+
+/* === generated art === */
+.intro { position: relative; overflow: hidden; background: #f6f9f3; margin-inline: -20px; padding: 0 20px; display: flex; flex-direction: column; }
+.intro-art { display: block; width: calc(100% + 40px); margin-inline: -20px; height: 170px; object-fit: cover; object-position: right center; order: 2; }
+.intro-copy { position: relative; z-index: 1; max-width: 36rem; padding: 12px 0 8px; order: 1; }
+.stretch-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; list-style: none; margin: 0 0 20px; padding: 0; }
+.stretch-row img { display: block; width: 100%; height: auto; background: var(--card); border-radius: 8px; }
+@media (min-width: 900px) {
+  .intro { display: block; min-height: 340px; }
+  .intro-art { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; order: 0; }
+  .intro-copy { max-width: 28rem; padding: 28px 0 40px; }
+}
+@media (max-width: 520px) {
+  .stretch-row { gap: 4px; }
+  .intro-art { height: 150px; }
+}

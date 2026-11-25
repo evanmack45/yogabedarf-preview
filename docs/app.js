@@ -128,17 +128,27 @@ async function card() {
   // #081816 on #e2512e is 4.73:1. Text on the cream move panel stays C.ink.
   const bandInk = bg === C.red ? C.inkOnRed : C.ink;
   x.fillStyle = bg; x.fillRect(0, 0, W, H);
+  try {
+    const art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/og.jpg'; });
+    const dw = 460, dh = 300, dx0 = W - dw - 48, dy0 = 48;
+    x.save();
+    x.beginPath(); x.roundRect(dx0, dy0, dw, dh, 28); x.clip();
+    // right half of the og: figure + dial on cream
+    const sx = art.width * 0.32, sw = art.width * 0.68;
+    x.drawImage(art, sx, 0, sw, art.height, dx0, dy0, dw, dh);
+    x.restore();
+  } catch {
+    const dx = 900, dy = 200, dr = 98, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
+    x.fillStyle = C.paper; x.beginPath(); x.arc(dx, dy, dr + 38, Math.PI, 0); x.lineTo(dx + dr + 38, dy + 26); x.lineTo(dx - dr - 38, dy + 26); x.closePath(); x.fill();
+    x.lineWidth = 26;
+    for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(dx, dy, dr, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
+    const ang = Math.PI + (s / 100) * Math.PI;
+    x.strokeStyle = C.ink; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 18), dy + Math.sin(ang) * (dr - 18)); x.stroke(); x.lineCap = 'butt';
+    x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 13, 0, 7); x.fill();
+  }
   x.fillStyle = bandInk; x.textAlign = 'left';
   x.font = '700 40px "Atkinson Hyperlegible Next"'; x.fillText('My Bedarf today', 72, 112);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need', 72, 156);
-  // mini dial
-  const dx = 900, dy = 200, dr = 98, segs = [[0, 25, C.sage], [25, 50, C.pea], [50, 75, C.mus], [75, 100, C.red]];
-  x.fillStyle = C.paper; x.beginPath(); x.arc(dx, dy, dr + 38, Math.PI, 0); x.lineTo(dx + dr + 38, dy + 26); x.lineTo(dx - dr - 38, dy + 26); x.closePath(); x.fill();
-  x.lineWidth = 26;
-  for (const [a, b, c] of segs) { x.strokeStyle = c; x.beginPath(); x.arc(dx, dy, dr, Math.PI + (a / 100) * Math.PI, Math.PI + (b / 100) * Math.PI); x.stroke(); }
-  const ang = Math.PI + (s / 100) * Math.PI;
-  x.strokeStyle = C.ink; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 18), dy + Math.sin(ang) * (dr - 18)); x.stroke(); x.lineCap = 'butt';
-  x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 13, 0, 7); x.fill();
   // the number and the tier
   x.fillStyle = bandInk;
   x.font = '800 340px "Bricolage Grotesque"'; x.fillText(`${s}%`, 56, 500);

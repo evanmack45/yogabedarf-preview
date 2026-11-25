@@ -8,8 +8,12 @@
 <meta name="description" content="Three taps measure your Bedarf (German for need), then a gentle 60-second stretch you can do in your chair. Moves from the NHS and Mayo Clinic.">
 <meta property="og:title" content="Bedarf-o-Meter">
 <meta property="og:description" content="Three taps, one score, one gentle 60-second desk stretch.">
-<meta property="og:image" content="https://evanmack45.github.io/yogabedarf-preview/og.png">
+<meta property="og:image" content="https://evanmack45.github.io/yogabedarf-preview/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A big semicircular meter in green, mustard and red with a red needle in the red zone and a stylised person folded forward in front of it.">
 <meta property="og:type" content="website">
+<link rel="preload" as="image" href="img/hero.webp" imagesrcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" imagesizes="100vw">
 <meta name="theme-color" content="#e2eadf">
 <link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/atkinson.woff2" as="font" type="font/woff2" crossorigin>
@@ -23,9 +27,12 @@
 </header>
 <main class="app" id="app">
   <div class="intro">
+    <img class="intro-art" src="img/hero.webp" srcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" sizes="100vw" width="1280" height="714" alt="A person in a standing forward fold beside a huge meter dial whose needle points into the red zone, in sage, mustard and red on cream." fetchpriority="high" decoding="async">
+    <div class="intro-copy">
     <h1>Bedarf-o-Meter</h1>
     <p class="gloss"><b lang="de">Bedarf</b> is German for <i>need</i>. This meter guesses how much stretch you need right now.</p>
     <p class="friend" id="friend" hidden></p>
+    </div>
   </div>
   <section class="setup" id="setup" aria-label="Your Bedarf">
     <div class="meter" id="meter" style="--v:8">
@@ -102,6 +109,13 @@
   </ol>
 </section>
 <section class="about" id="about" aria-labelledby="about-h">
+  <ul class="stretch-row">
+    <li><img src="img/stretch-1.webp" width="320" height="316" alt="Outlined figure tilting the neck to one side." loading="lazy" decoding="async"></li>
+    <li><img src="img/stretch-2.webp" width="320" height="317" alt="Outlined figure bending to the side." loading="lazy" decoding="async"></li>
+    <li><img src="img/stretch-4.webp" width="320" height="318" alt="Outlined figure in a seated twist." loading="lazy" decoding="async"></li>
+    <li><img src="img/stretch-5.webp" width="320" height="319" alt="Outlined figure in a forward fold." loading="lazy" decoding="async"></li>
+    <li><img src="img/stretch-6.webp" width="320" height="319" alt="Outlined figure stretching an arm across the chest." loading="lazy" decoding="async"></li>
+  </ul>
   <h2 id="about-h">About the meter</h2>
   <p>The Bedarf score is a playful guess from your three taps, not a health measurement. More hours sitting and a stiffer neck or back push it up. A stiffer neck brings more neck moves, a tighter back more upper-body moves, and longer sitting bigger leg moves, some of them standing. All 36 answer sets get a different set of four.</p>
   <p>Nothing you tap leaves your browser. There is no camera, no microphone, no account, no cookies and no trackers. The link you can copy holds only your three answers and whether you finished.</p>

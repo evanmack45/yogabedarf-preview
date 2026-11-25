@@ -1,3 +1,7 @@
+# DONE 2026-11-25 7:25 AM CT (Gizmo): Dash art wired — forward-fold masthead, five stretch panels (panel 3 skipped), share card rebuilt on og art, og.jpg replaced.
+
+Live SVG gauge kept (static dial was not placed — it would have competed with the live meter). Stretch panel 3 skipped per manifest (reads as a walk/stand). Gate (390+1280) PASS, no P0/P1; Lighthouse mobile performance 99 / accessibility 100 / best-practices 100, CLS 0, SEO 66 (intended noindex). Impeccable 0 findings at 390 and 1280.
+
 # DONE 2026-11-25 6:45 AM CT (Gizmo): Y1 red-band small-text contrast fixed to AA (commit 789d1de)
 
 Small text on the red share-card band was #173c36 on #e2512e at 3.14:1 (called ~3.5:1 earlier), below WCAG AA 4.5:1 for small type. Darkening the red would have lowered contrast against dark ink, and cream/white on the same red is only 3.63–3.85:1. Band text on red now uses #081816 (same green-ink family, darker), which is 4.73:1. The cream move panel and the sage/pea/mustard cards still use #173c36. There is no on-page result card with a red band; the done screen keeps ink and redtext on cream, already AA.
