@@ -1,0 +1,97 @@
+[
+  {
+    "url": "http://127.0.0.1:8015/",
+    "viewport": "phone",
+    "issues": [],
+    "shots": [
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__fold.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__scroll025.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__scroll050.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__scroll075.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__scroll100.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__full.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__phone__reduced-motion.png"
+    ],
+    "loadMs": 564,
+    "framePacing": {
+      "frames": 242,
+      "p50": 16.699999999999818,
+      "p95": 16.700000000000728,
+      "over50ms": 0
+    },
+    "dom": {
+      "overflowX": 0,
+      "wide": [],
+      "tinyText": 0,
+      "imgsNoAlt": 0,
+      "brokenImgs": 0,
+      "smallTapTargets": 0,
+      "h1": 1,
+      "ogImage": true,
+      "canvases": 0,
+      "fonts": [
+        "\"Bricolage Grotesque\"",
+        "\"Atkinson Hyperlegible Next\""
+      ],
+      "title": "Bedarf-o-Meter: how much stretch do you need?"
+    },
+    "axe": [],
+    "consoleErrors": [],
+    "badRequests": []
+  },
+  {
+    "url": "http://127.0.0.1:8015/",
+    "viewport": "desktop",
+    "issues": [],
+    "shots": [
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__fold.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__scroll025.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__scroll050.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__scroll075.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__scroll100.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__full.png",
+      "/workspace/sites/yogabedarf.com/qa/art-v2/127-0-0-1-8015__desktop__reduced-motion.png"
+    ],
+    "loadMs": 546,
+    "framePacing": {
+      "frames": 233,
+      "p50": 16.699999999999818,
+      "p95": 16.799999999999727,
+      "over50ms": 0
+    },
+    "dom": {
+      "overflowX": 0,
+      "wide": [],
+      "tinyText": 0,
+      "imgsNoAlt": 0,
+      "brokenImgs": 0,
+      "smallTapTargets": 0,
+      "h1": 1,
+      "ogImage": true,
+      "canvases": 0,
+      "fonts": [
+        "\"Bricolage Grotesque\"",
+        "\"Atkinson Hyperlegible Next\""
+      ],
+      "title": "Bedarf-o-Meter: how much stretch do you need?"
+    },
+    "axe": [],
+    "consoleErrors": [],
+    "badRequests": []
+  },
+  {
+    "url": "http://127.0.0.1:8015/",
+    "viewport": "lighthouse-mobile",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 66
+    },
+    "LCP": "2.0 s",
+    "CLS": "0",
+    "TBT": "0 ms",
+    "weight": "Total size was 207 KiB",
+    "issues": []
+  }
+]

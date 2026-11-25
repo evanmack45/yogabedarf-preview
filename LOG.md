@@ -1,3 +1,7 @@
+# DONE 2026-11-25 7:36 AM CT (Gizmo): Y1 phone hero is an art-directed crop, not a sliced band (commit pending)
+
+The 16:9 hero was object-fit:cover into a 150–170px strip on phone, which cut the figure at the waist and cropped the dial into a meaningless edge. Phone now uses a <picture> source (img/hero-phone.webp + 1314w, cropped from y1-hero-forward-fold-dial.png around the figure and dial, 876×730). Width/height and CSS aspect-ratio 876/730 reserve the box (CLS 0). Desktop masthead is unchanged. Gate (390+1280, qa/art-v2/) PASS; Lighthouse mobile performance 99 / accessibility 100 / best-practices 100, CLS 0, LCP 2.0 s, SEO 66 (noindex). Impeccable 0 at both viewports. Fold re-shot and viewed: qa/art-folds/fold-390.png shows the whole forward-fold figure and the dial.
+
 # DONE 2026-11-25 7:25 AM CT (Gizmo): Dash art wired — forward-fold masthead, five stretch panels (panel 3 skipped), share card rebuilt on og art, og.jpg replaced.
 
 Live SVG gauge kept (static dial was not placed — it would have competed with the live meter). Stretch panel 3 skipped per manifest (reads as a walk/stand). Gate (390+1280) PASS, no P0/P1; Lighthouse mobile performance 99 / accessibility 100 / best-practices 100, CLS 0, SEO 66 (intended noindex). Impeccable 0 findings at 390 and 1280.

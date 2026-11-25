@@ -13,7 +13,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A big semicircular meter in green, mustard and red with a red needle in the red zone and a stylised person folded forward in front of it.">
 <meta property="og:type" content="website">
-<link rel="preload" as="image" href="img/hero.webp" imagesrcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" imagesizes="100vw">
+<link rel="preload" as="image" href="img/hero-phone.webp" imagesrcset="img/hero-phone.webp 876w, img/hero-phone-1314.webp 1314w" imagesizes="100vw" media="(max-width: 899px)">
+<link rel="preload" as="image" href="img/hero.webp" imagesrcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" imagesizes="100vw" media="(min-width: 900px)">
 <meta name="theme-color" content="#e2eadf">
 <link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/atkinson.woff2" as="font" type="font/woff2" crossorigin>
@@ -27,7 +28,10 @@
 </header>
 <main class="app" id="app">
   <div class="intro">
-    <img class="intro-art" src="img/hero.webp" srcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" sizes="100vw" width="1280" height="714" alt="A person in a standing forward fold beside a huge meter dial whose needle points into the red zone, in sage, mustard and red on cream." fetchpriority="high" decoding="async">
+    <picture>
+      <source media="(max-width: 899px)" srcset="img/hero-phone.webp 876w, img/hero-phone-1314.webp 1314w" sizes="100vw" width="876" height="730">
+      <img class="intro-art" src="img/hero.webp" srcset="img/hero-800.webp 800w, img/hero.webp 1280w, img/hero-1920.webp 1920w" sizes="100vw" width="1280" height="714" alt="A person in a standing forward fold beside a huge meter dial whose needle points into the red zone, in sage, mustard and red on cream." fetchpriority="high" decoding="async">
+    </picture>
     <div class="intro-copy">
     <h1>Bedarf-o-Meter</h1>
     <p class="gloss"><b lang="de">Bedarf</b> is German for <i>need</i>. This meter guesses how much stretch you need right now.</p>
