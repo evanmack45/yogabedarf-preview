@@ -27,3 +27,8 @@
   - og.png is still the v1 image
   - Source-list commas can wrap onto their own line on a narrow phone
   - Prices and go-live still wait on Dash / Evan; this preview stays noindex
+
+## Canonical share URL, 2026-11-25 8:29 AM CT
+
+Share-card footer and copied links fall back to `https://evanmack45.github.io/yogabedarf-preview/` on localhost, 127.0.0.1, or file: URLs (switch to `https://yogabedarf.com/` at go-live).
+

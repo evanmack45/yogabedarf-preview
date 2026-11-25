@@ -104,7 +104,13 @@ document.addEventListener('keydown', (e) => {
 $('again').addEventListener('click', () => { view('setup'); history.replaceState(null, '', `#${encode(answers, false)}`); $('start').focus({ preventScroll: true }); });
 
 // Share
-const link = () => `${location.origin}${location.pathname}#${encode(answers, finished)}`;
+// Switch to https://yogabedarf.com/ at go-live.
+const CANONICAL = 'https://evanmack45.github.io/yogabedarf-preview/';
+const isLocalPage = () => location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+const publicPage = () => (isLocalPage() ? CANONICAL : `${location.origin}${location.pathname}`).replace(/index\.html$/, '').replace(/\/?$/, '/');
+const publicLink = (hash) => `${publicPage()}${hash.startsWith('#') ? hash : '#' + hash}`;
+const publicFooter = (hash) => publicLink(hash).replace(/^https?:\/\//, '');
+const link = () => publicLink(`#${encode(answers, finished)}`);
 const shareLine = () => `My Bedarf is ${bedarf(answers)}%. ${tier(bedarf(answers)).name}, apparently. Yours?`;
 $('copy').addEventListener('click', async () => {
   const text = `${shareLine()} ${link()}`;
@@ -171,7 +177,7 @@ async function card() {
   // the line people forward
   x.fillStyle = bandInk; x.font = '800 66px "Bricolage Grotesque"'; x.fillText(`My Bedarf is ${s}%. Yours?`, 72, top + ph + 92);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Same answers, same moves, one minute', 72, top + ph + 140);
-  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(`${location.host}${location.pathname}#${encode(answers, finished)}`, 72, top + ph + 180);
+  x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(publicFooter(`#${encode(answers, finished)}`), 72, top + ph + 180);
   x.font = '400 22px "Atkinson Hyperlegible Next"'; x.fillText('A playful score, not medical advice. Stop if it hurts.', 72, H - 34);
   return cv;
 }
