@@ -7,7 +7,7 @@ import { MOVES, stills, svg, hasArt, artPair } from './src/poses.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = join(here, '..', 'docs');
-const SITE = 'https://evanmack45.github.io/yogabedarf-preview/';
+const SITE = 'https://yogabedarf.com/';
 const AFTERNIC = 'https://www.afternic.com/domain/yogabedarf.com';
 const data = JSON.parse(readFileSync(join(here, 'data/moves.json'), 'utf8'));
 
@@ -36,7 +36,8 @@ const html = `<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
+<link rel="canonical" href="${SITE}">
+<meta property="og:url" content="${SITE}">
 <title>Bedarf-o-Meter: how much stretch do you need?</title>
 <meta name="description" content="Three taps measure your Bedarf (German for need), then a gentle 60-second stretch you can do in your chair. Moves from the NHS and Mayo Clinic.">
 <meta property="og:title" content="Bedarf-o-Meter">
@@ -161,6 +162,8 @@ mkdirSync(join(out, 'img'), { recursive: true });
 for (const f of readdirSync(join(here, 'src/img'))) copyFileSync(join(here, 'src/img', f), join(out, 'img', f));
 copyFileSync(join(here, 'src/img/og.jpg'), join(out, 'og.jpg'));
 for (const f of readdirSync(join(here, 'src/fonts'))) copyFileSync(join(here, 'src/fonts', f), join(out, 'fonts', f));
-writeFileSync(join(out, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
+writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`);
+writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE}</loc></url></urlset>\n`);
+writeFileSync(join(out, 'CNAME'), 'yogabedarf.com\n');
 writeFileSync(join(out, '.nojekyll'), '');
 console.log(`built ${out}: ${data.moves.length} moves, ${Object.keys(data.sources).length} sources`);

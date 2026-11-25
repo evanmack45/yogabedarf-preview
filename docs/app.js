@@ -105,7 +105,7 @@ $('again').addEventListener('click', () => { view('setup'); history.replaceState
 
 // Share
 // Switch to https://yogabedarf.com/ at go-live.
-const CANONICAL = 'https://evanmack45.github.io/yogabedarf-preview/';
+const CANONICAL = 'https://yogabedarf.com/';
 const isLocalPage = () => location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 const publicPage = () => (isLocalPage() ? CANONICAL : `${location.origin}${location.pathname}`).replace(/index\.html$/, '').replace(/\/?$/, '/');
 const publicLink = (hash) => `${publicPage()}${hash.startsWith('#') ? hash : '#' + hash}`;
