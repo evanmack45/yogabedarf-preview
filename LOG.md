@@ -1,3 +1,5 @@
+# DONE 2026-11-25 8:29 AM CT (Gizmo): Y1 share card and copied links use a canonical preview URL on localhost (https://evanmack45.github.io/yogabedarf-preview/; switch to https://yogabedarf.com/ at go-live). Canvas footer no longer bakes location.host.
+
 # DONE 2026-11-25 7:36 AM CT (Gizmo): Y1 phone hero is an art-directed crop, not a sliced band (commit pending)
 
 The 16:9 hero was object-fit:cover into a 150–170px strip on phone, which cut the figure at the waist and cropped the dial into a meaningless edge. Phone now uses a <picture> source (img/hero-phone.webp + 1314w, cropped from y1-hero-forward-fold-dial.png around the figure and dial, 876×730). Width/height and CSS aspect-ratio 876/730 reserve the box (CLS 0). Desktop masthead is unchanged. Gate (390+1280, qa/art-v2/) PASS; Lighthouse mobile performance 99 / accessibility 100 / best-practices 100, CLS 0, LCP 2.0 s, SEO 66 (noindex). Impeccable 0 at both viewports. Fold re-shot and viewed: qa/art-folds/fold-390.png shows the whole forward-fold figure and the dial.
@@ -127,3 +129,7 @@ Fold shots:
 - "Bedarf now: lower, we hope" is a joke line, and the meter cannot measure it.
 - The card prints the github.io address.
 - The score weights are my own and are labelled playful.
+
+## 2026-11-25 10:05 AM CT: r3 art
+
+Commit ec01754 (pushed). Wired chest/wrist/ankle pairs and the share ground; cut the neck pose (chin-lift versus cited head turn). Fixed the share moves panel overflow for long names (ph=340). e2e: loosened the still-pair assertion, added r3 blocks; image-url match uses slice(-60) so the long github.io origin is not truncated (that made 4 false fails on the live run). Live e2e 114/1 (pre-existing start-button line). Live gate PASS, Lighthouse 100, impeccable 0. Details in STATUS.md.

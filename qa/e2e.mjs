@@ -156,9 +156,10 @@ for (const hsh of ['#r=', '#r=999', '#r=012dd', '#garbage', '#%3Cscript%3E', '#r
 }
 for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=321d', 94, false], ['#r=322d', 100, false], ['#r=0120', 8, true]]) {
   const p = await page(1280, 800);
-  await p.addInitScript(() => { window.__t = []; window.__img = []; const f = CanvasRenderingContext2D.prototype.fillText, d = CanvasRenderingContext2D.prototype.drawImage; CanvasRenderingContext2D.prototype.fillText = function (t, ...r) { window.__t.push(String(t)); return f.call(this, t, ...r); }; CanvasRenderingContext2D.prototype.drawImage = function (im, ...r) { window.__img.push(im.src ? im.src.slice(0, 60) : 'canvas'); return d.call(this, im, ...r); }; });
+  await p.addInitScript(() => { window.__t = []; window.__img = []; const f = CanvasRenderingContext2D.prototype.fillText, d = CanvasRenderingContext2D.prototype.drawImage; CanvasRenderingContext2D.prototype.fillText = function (t, ...r) { window.__t.push(String(t)); return f.call(this, t, ...r); }; CanvasRenderingContext2D.prototype.drawImage = function (im, ...r) { window.__img.push(im.src ? im.src.slice(-60) : 'canvas'); return d.call(this, im, ...r); }; });
   await p.clock.install(); await p.goto(base + hsh); await p.click('#start'); await p.clock.runFor(61000);
   const dim = await p.evaluate(async () => { const c = await window.__card(); return [c.width, c.height]; });
+  if (process.env.CARD_OUT) { const u = await p.evaluate(async () => (await window.__card()).toDataURL('image/png')); (await import('fs')).writeFileSync(`${process.env.CARD_OUT}/share-${hsh.replace(/[#=]/g, '')}${odd ? '-odd' : ''}.png`, Buffer.from(u.split(',')[1], 'base64')); }
   const t = await p.evaluate(() => window.__t.join('\n')), im = await p.evaluate(() => window.__img.join('\n'));
   ok(dim[0] === 1080 && dim[1] === 1350 && new RegExp(`My Bedarf is ${score}%\\. Yours\\?`).test(t), `r3 card ${hsh}${odd ? ' (odd link, starts fresh)' : ''}: 1080x1350, says ${score}%`);
   ok(/share-ground\.webp/.test(im), `r3 card ${hsh}: the screenprint ground is drawn into the canvas`);

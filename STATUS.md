@@ -28,6 +28,17 @@
   - Source-list commas can wrap onto their own line on a narrow phone
   - Prices and go-live still wait on Dash / Evan; this preview stays noindex
 
+## r3 art wired, live preview, 2026-11-25 10:05 AM CT
+
+Wired from art/incoming/r3. Commit ec01754 (pushed to yogabedarf-preview, noindex kept, no DNS or go-live).
+
+- Wired: chest opener, wrist circles and ankle stretch start/stretch pairs (`pose-*-512/1024.webp`, srcset, width 1024 height 740, aspect kept) in the `#moves` list (lazy, no fetchpriority) and in the stage still mode. Share PNG is now drawn on `share-ground.webp` (screenprint ground; number left of the figure, moves panel over the cream/band seam, CTA on the band). Canonical-URL fallback and the no-localhost assert kept.
+- CUT, not wired: the neck pose. Dash says it is a chin-lift. The move is the cited NHS "turn your head toward your left shoulder"; no NHS or Mayo source for a chin-lift (only WebMD). The SVG pair and the copy stay. Options: re-do the pose as a head turn (ART-REQUESTS-r4 slot 1) or add a WebMD-cited chin-lift move.
+- Caveats: the ground's red needle is static, so a low score (8%) sits under a needle pointing high (the old og crop did the same; the dial is cropped at the right edge, so no live needle could be overlaid). Chest art has the arms behind the back versus the "arms out to the sides" cue. The ankle art is subtle.
+- Live e2e (qa/art-folds/r3/e2e-live.log): 114 pass, 1 fail. The one fail is "@390 start button in first screen (1147 of 844)", present before r3: it comes from the 7:36 AM phone hero crop. Not fixed; open item. Cards on four inputs, one odd link (#r=0120): 1080x1350, ground drawn, canonical footer.
+- Live gate (qa/art-folds/r3/gate-live/, Result PASS): Lighthouse 100 / 100 / 100 / SEO 63 (noindex), CLS 0, LCP 1.2 s. Impeccable 0 at 390, 1280 and static. Local gate: qa/r3/gate-local (99, CLS 0).
+- Live captures (viewed): qa/art-folds/r3/live-moves-{chest,wrist-circles,ankle}-{390,1280}.png, live-stage-still-{390,1280}.png, share-{r000,r321d,r322d,r0120-odd}.png (generated on the live page with window.__card()).
+
 ## Canonical share URL, 2026-11-25 8:29 AM CT
 
 Share-card footer and copied links fall back to `https://evanmack45.github.io/yogabedarf-preview/` on localhost, 127.0.0.1, or file: URLs (switch to `https://yogabedarf.com/` at go-live).
