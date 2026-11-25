@@ -133,3 +133,10 @@ Fold shots:
 ## 2026-11-25 10:05 AM CT: r3 art
 
 Commit ec01754 (pushed). Wired chest/wrist/ankle pairs and the share ground; cut the neck pose (chin-lift versus cited head turn). Fixed the share moves panel overflow for long names (ph=340). e2e: loosened the still-pair assertion, added r3 blocks; image-url match uses slice(-60) so the long github.io origin is not truncated (that made 4 false fails on the live run). Live e2e 114/1 (pre-existing start-button line). Live gate PASS, Lighthouse 100, impeccable 0. Details in STATUS.md.
+
+## 2026-11-25 10:11 AM CT: start button in the first screen at 390; chest art unhooked
+
+The 7:36 AM phone hero crop had put `#start` at 1147 on an 844-tall screen. Phone layout now puts the same art-directed crop (whole figure and dial) beside the title instead of stacked under it, so the button sits at 787 of 844 at 390, and also fits 375×812. Short phones (max-height 800) pin the button to the bottom of the viewport (checked at 360×640 and 375×667). Desktop is unchanged.
+
+Chest-opener r3 art unhooked: hands behind the back vs the cited "arms out to the sides." Stick SVG restored; copy unchanged; r4 redo requested. e2e 174/0 including the new short-phone viewports. Local gate PASS, Lighthouse 99, CLS 0, impeccable 0 (qa/fold-start/). Live e2e and preview push follow this entry.
+

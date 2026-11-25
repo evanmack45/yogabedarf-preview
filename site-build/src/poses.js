@@ -107,7 +107,7 @@ export const peak = (id) => MOVES[id][1][0];
 // Generated art for three moves (start and stretch in one image, 1024x740). Other moves keep the drawn pair.
 // The neck-turn picture was not wired: the art shows a chin-lift and the move is a cited NHS head turn.
 const POSE_ART = {
-  chest: 'Seated figure in profile, then the same figure with shoulders back, arms drawn behind the chair and the chest lifted.',
+  // chest is not listed: the r3 pair shows hands clasped behind the back, but the cited NHS cue says arms out to the sides. Stick SVG stays until an r4 redo.
   'wrist-circles': 'Seated figure in profile, then the same figure with both forearms held out in front and the wrists loose.',
   ankle: 'Seated figure in profile, then the same figure with one leg straightened out in front.',
 };

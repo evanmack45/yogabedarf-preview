@@ -28,6 +28,21 @@
   - Source-list commas can wrap onto their own line on a narrow phone
   - Prices and go-live still wait on Dash / Evan; this preview stays noindex
 
+## Start button in the first screen, 2026-11-25 10:11 AM CT
+
+The start button is back in the first screen at 390×844 (bottom at 787 of 844). It also fits 375×812 naturally. On short phones (360×640, 375×667, and other phone widths with height ≤ 800) the button is pinned to the bottom of the viewport so it stays in the first screen, without shrinking the hero further.
+
+How: the art-directed phone crop (figure + dial, `hero-phone.webp`, aspect 876/730) is kept, but on viewports under 900px it sits beside the title instead of in a full-width stack under it. Desktop masthead is unchanged. Gaps on phone are slightly tighter. Cited copy was not changed.
+
+- Local e2e (qa/e2e.mjs): **174 passed, 0 failed**, including 360×640 and 375×667 (start in first screen, gloss near the top, no sideways scroll).
+- Local gate (qa/fold-start/, Result PASS): Lighthouse **99 / 100 / 100 / SEO 66** (noindex), CLS 0, LCP 2.0 s. Impeccable 0 at 390, 1280 and static. Shots viewed (phone fold, desktop fold, reduced-motion).
+- Extra short-phone shots (viewed): qa/fold-start/fold-360x640.png, fold-375x667.png, fold-375x812.png. art-folds/fold-390.png and fold-1280.png updated.
+
+### Chest-opener art
+
+The r3 painted pair does not match the cited NHS cue ("put your arms out to the sides… push your chest forward and up"). It shows hands clasped behind the back. Cropping cannot fix that. The stick SVG is the same side-view "arms reach back" idea, but a polished wrong pose would fight the copy, so the painted pair is unhooked and the stick pair is back on `#m-chest` and in the stage. Copy is unchanged. Requested as `Y1-r4-chest-opener` in ART-REQUESTS-r4.md (front or three-quarter view, arms clearly out to the sides). The webp files stay in `src/img/` unused.
+
+
 ## r3 art wired, live preview, 2026-11-25 10:05 AM CT
 
 Wired from art/incoming/r3. Commit ec01754 (pushed to yogabedarf-preview, noindex kept, no DNS or go-live).
