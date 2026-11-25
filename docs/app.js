@@ -118,14 +118,17 @@ function wrap(x, text, maxW) {
   for (const w of words) { const t = cur ? `${cur} ${w}` : w; if (x.measureText(t).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t; }
   return [...lines, cur];
 }
-const CARD = { sage: '#8db596', pea: '#c9cf7d', mus: '#e7b43c', red: '#e2512e', ink: '#173c36', paper: '#f6f9f3' };
+const CARD = { sage: '#8db596', pea: '#c9cf7d', mus: '#e7b43c', red: '#e2512e', ink: '#173c36', inkOnRed: '#081816', paper: '#f6f9f3' };
 async function card() {
   await Promise.all([document.fonts.load('800 80px "Bricolage Grotesque"'), document.fonts.load('400 30px "Atkinson Hyperlegible Next"'), document.fonts.load('700 30px "Atkinson Hyperlegible Next"')]);
   const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const x = cv.getContext('2d'), s = bedarf(answers), bd = band(s), tr = tier(s), C = CARD;
   const bg = { low: C.sage, some: C.pea, high: C.mus, max: C.red }[bd.key];
+  // Darker ink on the red band only: #173c36 on #e2512e is 3.14:1 (fails WCAG AA for small text).
+  // #081816 on #e2512e is 4.73:1. Text on the cream move panel stays C.ink.
+  const bandInk = bg === C.red ? C.inkOnRed : C.ink;
   x.fillStyle = bg; x.fillRect(0, 0, W, H);
-  x.fillStyle = C.ink; x.textAlign = 'left';
+  x.fillStyle = bandInk; x.textAlign = 'left';
   x.font = '700 40px "Atkinson Hyperlegible Next"'; x.fillText('My Bedarf today', 72, 112);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need', 72, 156);
   // mini dial
@@ -137,6 +140,7 @@ async function card() {
   x.strokeStyle = C.ink; x.lineWidth = 9; x.lineCap = 'round'; x.beginPath(); x.moveTo(dx, dy); x.lineTo(dx + Math.cos(ang) * (dr - 18), dy + Math.sin(ang) * (dr - 18)); x.stroke(); x.lineCap = 'butt';
   x.fillStyle = C.ink; x.beginPath(); x.arc(dx, dy, 13, 0, 7); x.fill();
   // the number and the tier
+  x.fillStyle = bandInk;
   x.font = '800 340px "Bricolage Grotesque"'; x.fillText(`${s}%`, 56, 500);
   x.font = '800 84px "Bricolage Grotesque"'; let y = 596;
   for (const l of wrap(x, tr.name, W - 144)) { x.fillText(l, 72, y); y += 84; }
@@ -155,7 +159,7 @@ async function card() {
     x.textAlign = 'left';
   });
   // the line people forward
-  x.fillStyle = C.ink; x.font = '800 66px "Bricolage Grotesque"'; x.fillText(`My Bedarf is ${s}%. Yours?`, 72, top + ph + 92);
+  x.fillStyle = bandInk; x.font = '800 66px "Bricolage Grotesque"'; x.fillText(`My Bedarf is ${s}%. Yours?`, 72, top + ph + 92);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Same answers, same moves, one minute', 72, top + ph + 140);
   x.font = '700 28px "Atkinson Hyperlegible Next"'; x.fillText(`${location.host}${location.pathname}#${encode(answers, finished)}`, 72, top + ph + 180);
   x.font = '400 22px "Atkinson Hyperlegible Next"'; x.fillText('A playful score, not medical advice. Stop if it hurts.', 72, H - 34);
