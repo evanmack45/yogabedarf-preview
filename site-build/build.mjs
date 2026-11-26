@@ -8,6 +8,9 @@ import { MOVES, stills, svg, hasArt, artPair } from './src/poses.js';
 const here = dirname(fileURLToPath(import.meta.url));
 const out = join(here, '..', 'docs');
 const SITE = 'https://yogabedarf.com/';
+const CHAIR = `${SITE}chair-stretch-60-seconds/`;
+const APP_LD = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'Bedarf-o-Meter', url: SITE, description: 'Three taps measure your Bedarf (German for need), then a gentle 60-second stretch you can do in your chair. Moves from the NHS and Mayo Clinic.', applicationCategory: 'LifestyleApplication', operatingSystem: 'Any', browserRequirements: 'Requires JavaScript', isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } };
+const ldTag = `<script type="application/ld+json">${JSON.stringify(APP_LD).replace(/</g, '\\u003c')}</script>`;
 const AFTERNIC = 'https://www.afternic.com/domain/yogabedarf.com';
 const data = JSON.parse(readFileSync(join(here, 'data/moves.json'), 'utf8'));
 
@@ -55,6 +58,7 @@ const html = `<!doctype html>
 <link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/atkinson.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
+${ldTag}
 <script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 24a12 12 0 0 1 24 0' fill='none' stroke='%23173c36' stroke-width='5'/%3E%3Cline x1='16' y1='24' x2='24' y2='12' stroke='%23e2512e' stroke-width='3'/%3E%3C/svg%3E">
 </head>
@@ -148,6 +152,7 @@ const html = `<!doctype html>
   </ul>
   <h2 id="about-h">About the meter</h2>
   <p>The score is a playful guess from your three taps, not a health measurement. Each of the 36 answer sets gets its own four moves.</p>
+  <p>The default four moves are also written out on the <a href="chair-stretch-60-seconds/">60-second chair stretch</a> page.</p>
   <p>Nothing leaves your browser. There is no camera, microphone, account, cookie or tracker. The link you copy holds only your three answers and whether you finished.</p>
   <p class="srchead">Sources, all checked on 25 November 2026:</p>
   <ul class="srcs">${Object.values(data.sources).map((s) => `<li><a href="${s.url}">${esc(s.name)}</a></li>`).join('')}</ul>
@@ -164,14 +169,65 @@ const html = `<!doctype html>
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(join(out, 'fonts'), { recursive: true });
+
+const chairMoves = plan0.map((id) => byId[id]);
+const chairAnswer = 'This is a gentle 60-second stretch you can do in a chair. Four moves, 15 seconds each: Neck turn, Chest opener, Wrist circles and Ankle stretch. They come from the NHS and Mayo Clinic, named on each move. Stop if you feel sharp pain. This is not medical advice.';
+if (chairAnswer.trim().split(/\s+/).length > 60) throw new Error('chair answer over 60 words');
+if (chairMoves.map((m) => m.name).join(', ') !== 'Neck turn, Chest opener, Wrist circles, Ankle stretch') throw new Error('chair page must use the default four chair moves');
+const chairList = chairMoves.map((m, i) => {
+  const so = src(m);
+  return `<li id="c-${m.id}"><h2><span class="c-n">${i + 1}</span> ${esc(m.name)} <span class="c-sec">15 seconds</span></h2><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${so.url}">${esc(so.name)}</a></p></li>`;
+}).join('\n  ');
+const CHAIR_LD = { '@context': 'https://schema.org', '@type': 'WebPage', name: 'A 60-second chair stretch', url: CHAIR, description: chairAnswer, isPartOf: { '@type': 'WebSite', name: 'yogabedarf', url: SITE } };
+const chairHTML = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="canonical" href="${CHAIR}">
+<meta property="og:url" content="${CHAIR}">
+<title>A 60-second chair stretch | yogabedarf</title>
+<meta name="description" content="A gentle 60-second stretch you can do in a chair. Four moves from the NHS and Mayo Clinic. Stop if you feel sharp pain.">
+<meta property="og:title" content="A 60-second chair stretch">
+<meta property="og:description" content="Four gentle moves, 15 seconds each, from the NHS and Mayo Clinic.">
+<meta property="og:image" content="${SITE}og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<script type="application/ld+json">${JSON.stringify(CHAIR_LD).replace(/</g, '\\u003c')}</script>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body class="chair-page">
+<header class="top">
+  <a class="brand" href="../"><span>yoga</span>bedarf</a>
+  <a class="toplink" href="../">Open the meter</a>
+</header>
+<main class="chair">
+  <h1>A 60-second chair stretch</h1>
+  <p class="gloss" id="ch-answer">${chairAnswer}</p>
+  <p class="safe" id="ch-safe">Stop if you feel sharp pain. This is not medical advice. If you are not sure these moves suit you, check with a doctor or physio first.</p>
+  <ol class="chair-list" id="ch-list">
+  ${chairList}
+  </ol>
+  <p>These are the four default moves on the meter, 15 seconds each, one minute in total. Your set can change when you change the three answers on the <a href="../">Bedarf-o-Meter</a>.</p>
+</main>
+<footer class="foot">
+  <p>A playful score, not a health measurement.</p>
+  <p><a href="${AFTERNIC}">This domain is for sale.</a></p>
+</footer>
+</body>
+</html>`;
+
 writeFileSync(join(out, 'index.html'), html);
+mkdirSync(join(out, 'chair-stretch-60-seconds'), { recursive: true });
+writeFileSync(join(out, 'chair-stretch-60-seconds/index.html'), chairHTML);
 for (const f of ['style.css', 'app.js', 'logic.js', 'poses.js']) copyFileSync(join(here, 'src', f), join(out, f));
 mkdirSync(join(out, 'img'), { recursive: true });
 for (const f of readdirSync(join(here, 'src/img'))) copyFileSync(join(here, 'src/img', f), join(out, 'img', f));
 copyFileSync(join(here, 'src/img/og.jpg'), join(out, 'og.jpg'));
 for (const f of readdirSync(join(here, 'src/fonts'))) copyFileSync(join(here, 'src/fonts', f), join(out, 'fonts', f));
 writeFileSync(join(out, 'robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${SITE}sitemap.xml\n`);
-writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE}</loc></url></urlset>\n`);
+writeFileSync(join(out, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${SITE}</loc></url><url><loc>${CHAIR}</loc></url></urlset>\n`);
 writeFileSync(join(out, 'CNAME'), 'yogabedarf.com\n');
 writeFileSync(join(out, '.nojekyll'), '');
 console.log(`built ${out}: ${data.moves.length} moves, ${Object.keys(data.sources).length} sources`);

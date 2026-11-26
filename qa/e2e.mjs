@@ -257,6 +257,39 @@ for (const [tag, hsh, a] of [['low', '', { h: 0, n: 0, b: 0 }], ['mid', '#r=200'
   ok(h.copyBottom <= h.top + 130 && !h.ow, `hero: the title and gloss stay in the cream corner (bottom ${Math.round(h.copyBottom - h.top)}px into the art), no sideways scroll`);
   await p.context().close();
 }
+
+// SEO fix list (Compass 11/25): JSON-LD on the home, gloss already in the 390 fold, chair-stretch page
+{
+  const p = await page(390, 844);
+  await p.goto(base, { waitUntil: 'networkidle' });
+  const ld = await p.$$eval('script[type="application/ld+json"]', (s) => s.map((e) => JSON.parse(e.textContent)));
+  ok(ld.length === 1 && ld[0]['@type'] === 'WebApplication' && ld[0].offers?.price === '0' && ld[0].isAccessibleForFree === true, 'home JSON-LD: WebApplication, price 0');
+  const gloss = await p.evaluate(() => {
+    const el = document.querySelector('.gloss'); const r = el.getBoundingClientRect();
+    return { text: el.innerText, inFold: r.top >= 0 && r.bottom <= innerHeight };
+  });
+  ok(gloss.inFold && /Bedarf/.test(gloss.text) && /need/.test(gloss.text), 'gloss of Bedarf as German for need is visible in the 390 fold');
+  const origin = new URL(base).origin;
+  const chUrl = new URL('chair-stretch-60-seconds/', base).href;
+  const r = await p.goto(chUrl, { waitUntil: 'networkidle' });
+  ok(r.status() === 200, 'chair-stretch page returns 200');
+  const can = await p.getAttribute('link[rel="canonical"]', 'href');
+  ok(can === origin + '/chair-stretch-60-seconds/', `chair canonical is the page URL (${can})`);
+  const ans = (await p.textContent('#ch-answer')).trim();
+  ok(ans.split(/\s+/).length <= 60, `chair first answer is under 60 words (${ans.split(/\s+/).length})`);
+  const mainWords = await p.$eval('main', (el) => (el.innerText.match(/\S+/g) || []).length);
+  ok(mainWords <= 450, `chair main is under 450 words (${mainWords})`);
+  const safe = await p.textContent('#ch-safe');
+  ok(/sharp pain/i.test(safe) && /not medical advice/i.test(safe), 'safety line is visible: stop if sharp pain, no new medical claim');
+  const items = await p.$$eval('#ch-list li', (lis) => lis.map((li) => ({ name: li.querySelector('h2').innerText, href: li.querySelector('a')?.href, src: li.querySelector('a')?.textContent, text: li.innerText })));
+  const expect = ['Neck turn', 'Chest opener', 'Wrist circles', 'Ankle stretch'];
+  ok(items.length === 4 && expect.every((n, i) => items[i].name.includes(n)), 'chair page lists the four default moves in order');
+  const named = items.every((it) => /NHS|Mayo Clinic/.test(it.src || '') && /^https:\/\/www\.(nhs\.uk|mayoclinic\.org)\//.test(it.href || ''));
+  ok(named, 'each move names its NHS or Mayo Clinic source and links it');
+  const sm = await p.evaluate(async (u) => (await fetch(u, { cache: 'no-store' })).text(), new URL('sitemap.xml', base).href);
+  ok(sm.includes('<loc>' + origin + '/chair-stretch-60-seconds/</loc>') && sm.includes('<loc>' + origin + '/</loc>'), 'sitemap lists the home and /chair-stretch-60-seconds/');
+  await p.context().close();
+}
 { const r = await (await fetch(base + 'robots.txt')).text(); ok(/Allow: \//.test(r) && /Sitemap:/.test(r), 'robots.txt allows all and names the sitemap'); }
 await b.close();
 console.log(`\n${pass} passed, ${fail} failed`);
