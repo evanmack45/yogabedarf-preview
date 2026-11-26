@@ -155,3 +155,12 @@ Fix, first pass (3842438): cover the baked dial and draw a live gauge with the n
 Polish (8e2b5c0, live now): a cream panel just right of the figure (`fillRect(615, 0, W-615, 560)`) hides the baked dial, and a smaller live gauge sits at (880, 400, r=170), fully on the card (layout right 1074 of 1080). Mapping is `π + score/100 * π` (0% at 9 o'clock, 100% at 3 o'clock), same as the on-page SVG. The OG image was left as decoration, per Barker.
 
 e2e asserts angle-versus-value, an uncropped bounding box, and tip direction on #r=000 (8%), #r=200 (50%), #r=321d (94%), #r=322d (100%) and an odd broken hash #r=0120 that starts fresh at 8%. Local e2e 199/0. Live e2e after 8e2b5c0: 199 PASS, 0 FAIL. golive-verify --gate PASS (y1-verify-fix2.log). Lighthouse 100/100/100/100, CLS 0, LCP 1.2 s, impeccable 0 at 390, 1280 and static. Viewed live after PNGs: qa/art-folds/share-fix/after-low-8.png (needle in green), after-mid-50.png (needle straight up at mid), after-high-100.png (needle in red, full cap visible). Before: qa/art-folds/share-fix/before-barker.png (baked red needle, cropped dial).
+
+## 2026-11-25 ~9:35 PM CT: quality-bar cut, four moves shown (Gizmo, for Dash)
+
+Commit 147c1c2 (pushed, live on yogabedarf.com). The moves list shows the four chosen moves (updates with the answers); the other 12 are behind one button, "Show the other 12 moves" (aria-expanded, keyboard, `#m-` links open it; all 16 show without JS). First screen at 390 cut from 114 to 82 words: shorter gloss, tier name only under the score, one short safety line by the start button (full line stays in the footer). About copy and sources trimmed.
+
+- Phone length 10.7 to 4.3 screens. Total visible words 1,122 to 429. Prose 986 to 269. Ban-list hits 1 to 0.
+- e2e (qa/e2e.mjs): live 231 PASS, 0 FAIL (was 199). Counts fold words at 390 (82, limit under 100) and 1280 (73), checks low, mid, high and odd-hash inputs, keyboard, `#m-` link, no price text. One old assertion updated for the shorter privacy line.
+- Gate PASS (0 failing). Lighthouse 100/100/100/100, CLS 0, impeccable 0. Details: /workspace/gizmo/slop-fix.md.
+- No prices added. No DNS changes. Nobody messaged.
