@@ -181,14 +181,68 @@ for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=200', 50, false], ['
   ok(p.errs.length === 0, `r3 card ${hsh}: no console errors ${p.errs.join(' ')}`);
   await p.context().close();
 }
+// Quality-bar cut: four chosen moves in the list, the other twelve behind one button; first screen under 100 words
+const foldWords = (pg, H0) => pg.evaluate((H) => {
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); let n, fold = 0;
+  while ((n = w.nextNode())) { const el = n.parentElement; if (!el || ['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE'].includes(el.tagName)) continue;
+    const words = (n.nodeValue.match(/\S+/g) || []).length; if (!words) continue;
+    let vis = true, e = el; while (e && e !== document.documentElement) { const cs = getComputedStyle(e); if (cs.display === 'none' || cs.visibility === 'hidden') { vis = false; break; } e = e.parentElement; }
+    if (!vis) continue; const r = document.createRange(); r.selectNodeContents(n); const rc = [...r.getClientRects()].filter((x) => x.width > 0 && x.height > 0); if (!rc.length) continue;
+    if (Math.min(...rc.map((x) => x.top + scrollY)) < H) fold += words; }
+  return fold; }, H0);
+for (const [w, h, cap] of [[390, 844, 99], [1280, 800, 130]]) {
+  const p = await page(w, h); await p.goto(base); await p.waitForTimeout(800);
+  const fw = await foldWords(p, h);
+  ok(fw <= cap, `first screen at ${w}: ${fw} words (limit ${cap === 99 ? 'under 100' : cap})`);
+  await p.context().close();
+}
+for (const [tag, hsh, a] of [['low', '', { h: 0, n: 0, b: 0 }], ['mid', '#r=200', { h: 2, n: 0, b: 0 }], ['high', '#r=322', { h: 3, n: 2, b: 2 }], ['odd broken hash', '#r=0120', { h: 0, n: 0, b: 0 }]]) {
+  for (const [w, h] of [[390, 844], [1280, 800]]) {
+    const p = await page(w, h); await p.goto(base + hsh); await p.waitForTimeout(300);
+    const plan = L.pickMoves(a);
+    const st = await p.evaluate(() => { const vis = (sel) => [...document.querySelectorAll(sel)].filter((e) => e.offsetParent !== null); const bt = document.getElementById('more-moves'); const r = bt.getBoundingClientRect();
+      return { picks: vis('#picks > li').map((e) => e.id.slice(2)), restShown: vis('#rest > li').length, restN: document.querySelectorAll('#rest > li').length, tag: bt.tagName, exp: bt.getAttribute('aria-expanded'), ctl: bt.getAttribute('aria-controls'), txt: bt.textContent.trim(), h: r.height, plan: document.getElementById('plan').textContent }; });
+    ok(JSON.stringify(st.picks) === JSON.stringify(plan) && st.restShown === 0 && st.restN === data.moves.length - 4, `${tag} @${w}: list shows exactly the four chosen moves in plan order, 12 held back`);
+    ok(st.tag === 'BUTTON' && st.exp === 'false' && st.ctl === 'rest' && st.txt === 'Show the other 12 moves' && st.h >= 44, `${tag} @${w}: "Show the other 12 moves" is a real button, aria-expanded=false, controls #rest, 44px tall`);
+    ok(plan.every((id) => st.plan.includes(data.moves.find((m) => m.id === id).name)), `${tag} @${w}: the "Your four moves are" line names the same four`);
+    await p.context().close();
+  }
+}
+{
+  const p = await page(390, 844); await p.goto(base); await p.waitForTimeout(300);
+  await p.focus('#more-moves'); await p.keyboard.press('Enter');
+  let st = await p.evaluate(() => ({ exp: document.getElementById('more-moves').getAttribute('aria-expanded'), txt: document.getElementById('more-moves').textContent.trim(), shown: [...document.querySelectorAll('#rest > li')].filter((e) => e.offsetParent !== null).length, focus: document.activeElement.id }));
+  ok(st.exp === 'true' && st.shown === 12 && st.txt === 'Hide the other 12 moves' && st.focus === 'more-moves', `keyboard: Enter shows the other 12 and keeps focus (${JSON.stringify(st)})`);
+  await p.keyboard.press('Space');
+  st = await p.evaluate(() => ({ exp: document.getElementById('more-moves').getAttribute('aria-expanded'), shown: [...document.querySelectorAll('#rest > li')].filter((e) => e.offsetParent !== null).length }));
+  ok(st.exp === 'false' && st.shown === 0, 'keyboard: Space hides them again');
+  // changing the answers re-picks the four and moves the others
+  await p.click('label.chip:has(input[name=h][value="3"])'); await p.click('label.chip:has(input[name=n][value="2"])'); await p.click('label.chip:has(input[name=b][value="1"])');
+  const plan2 = L.pickMoves({ h: 3, n: 2, b: 1 });
+  const ids = await p.evaluate(() => ({ picks: [...document.querySelectorAll('#picks > li')].map((e) => e.id.slice(2)), rest: document.querySelectorAll('#rest > li').length }));
+  ok(JSON.stringify(ids.picks) === JSON.stringify(plan2) && ids.rest === 12, 'new answers: the list shows the new four, 12 held back, none lost');
+  // a link to a held-back move opens the list and scrolls to it
+  const hidden = data.moves.find((m) => !plan2.includes(m.id) && m.id !== 'chest').id;
+  await p.goto(base + '#m-' + hidden); await p.waitForTimeout(500);
+  const hv = await p.evaluate((id) => { const e = document.getElementById('m-' + id); const r = e.getBoundingClientRect(); return { on: e.offsetParent !== null, exp: document.getElementById('more-moves').getAttribute('aria-expanded'), inview: r.top < innerHeight && r.bottom > 0, friend: document.getElementById('friend').hidden }; }, hidden);
+  ok(hv.on && hv.exp === 'true' && hv.inview && hv.friend, `#m-${hidden} link opens the list and shows that move`);
+  await p.context().close();
+}
+{
+  const p = await page(390, 844); await p.goto(base); await p.waitForTimeout(300);
+  const txt = await p.evaluate(() => document.body.innerText);
+  ok(!/[$€£]\s?\d|\bprice\b|\bpriced\b|\bUSD\b/i.test(txt.replace(/This domain is for sale\./, '')), 'no price or currency text on the page');
+  ok(/check with a doctor or physio/.test(await p.textContent('.foot')), 'the full safety line stays in the footer');
+  await p.context().close();
+}
 // no JS
 {
   const p = await page(390, 844, { javaScriptEnabled: false });
   await p.goto(base);
-  ok(await p.locator('.mlist li').count() === data.moves.length && await p.locator('.mlist li a[href^="https://www."]').count() === data.moves.length, 'no JS: all moves listed with a cited source');
+  ok(await p.locator('.mlist li').count() === data.moves.length && await p.locator('.mlist li a[href^="https://www."]').count() === data.moves.length && await p.locator('.mlist li:visible').count() === data.moves.length && !(await p.isVisible('#more-moves')), 'no JS: all 16 moves listed and visible with a cited source, no show button');
   ok(/need JavaScript/.test(await p.textContent('noscript')) && await p.isVisible('#setup'), 'no JS: says the timer needs JavaScript');
   const html = await p.content();
-  ok(!/getUserMedia|camera\.|navigator\.geolocation/.test(readFileSync(new URL('../docs/app.js', import.meta.url), 'utf8')) && /no camera, no microphone/.test(html), 'no camera or mic code; page says so');
+  ok(!/getUserMedia|camera\.|navigator\.geolocation/.test(readFileSync(new URL('../docs/app.js', import.meta.url), 'utf8')) && /no camera, microphone, account, cookie or tracker/.test(html), 'no camera or mic code; page says so');
   await p.context().close();
 }
 { const r = await (await fetch(base + 'robots.txt')).text(); ok(/Allow: \//.test(r) && /Sitemap:/.test(r), 'robots.txt allows all and names the sitemap'); }
