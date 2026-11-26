@@ -180,23 +180,16 @@ async function card() {
   // Darker ink on the red band only: #173c36 on #e2512e is 3.14:1 (fails WCAG AA for small text).
   // #081816 on #e2512e is 4.73:1. Text on the cream move panel stays C.ink.
   const bandInk = bg === C.red ? C.inkOnRed : C.ink;
-  // Ground: Dash's cream screenprint (figure top right, cream mid, flat bottom strip).
-  // The baked dial on that art is cropped and its needle sits in the red, so we
-  // cover it and draw a full live dial whose needle tracks the score.
+  // Plain cream ground. The screenprint ground (figure plus a baked, cropped dial)
+  // is gone: covering its dial sliced the figure at x=615 (Shears 11/25). The
+  // score, the live dial and the four moves carry the card.
   const STRIP = 1012;
   x.fillStyle = '#f7ecd6'; x.fillRect(0, 0, W, H);
-  let art = null;
-  try {
-    art = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = 'img/share-ground.webp'; });
-    x.drawImage(art, 0, 0, W, H);
-    // Hide the baked (cropped, red-fixed) dial. Starts just right of the figure.
-    x.fillStyle = '#f7ecd6'; x.fillRect(615, 0, W - 615, 560);
-  } catch { art = null; }
-  // Sit the live dial fully on the card, to the right of the figure.
+  // Sit the live dial fully on the card, right of the score.
   const gauge = drawGauge(x, s, 880, 400, 170);
   lastLayout = { gauge, score: s, W, H };
   x.fillStyle = bg; x.fillRect(0, STRIP, W, H - STRIP);
-  // type on the cream: left of the figure, then the full width under the dial
+  // type on the cream: left of the dial, then the full width under it
   x.fillStyle = C.ink; x.textAlign = 'left';
   x.font = '700 40px "Atkinson Hyperlegible Next"'; x.fillText('My Bedarf today', 72, 112);
   x.font = '400 28px "Atkinson Hyperlegible Next"'; x.fillText('Bedarf is German for need', 72, 156);

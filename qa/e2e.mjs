@@ -167,7 +167,9 @@ for (const [hsh, score, odd] of [['#r=000', 8, false], ['#r=200', 50, false], ['
   if (process.env.CARD_OUT) { const u = await p.evaluate(async () => (await window.__card()).toDataURL('image/png')); (await import('fs')).writeFileSync(`${process.env.CARD_OUT}/share-${hsh.replace(/[#=]/g, '')}${odd ? '-odd' : ''}.png`, Buffer.from(u.split(',')[1], 'base64')); }
   const t = await p.evaluate(() => window.__t.join('\n')), im = await p.evaluate(() => window.__img.join('\n'));
   ok(dim[0] === 1080 && dim[1] === 1350 && new RegExp(`My Bedarf is ${score}%\\. Yours\\?`).test(t), `r3 card ${hsh}${odd ? ' (odd link, starts fresh)' : ''}: 1080x1350, says ${score}%`);
-  ok(/share-ground\.webp/.test(im), `r3 card ${hsh}: the screenprint ground is drawn into the canvas`);
+  ok(!/share-ground\.webp/.test(im), `r3 card ${hsh}: no screenprint ground, so no sliced figure (Shears 11/25)`);
+  const edge = await p.evaluate(async () => { const c = await window.__card(), d = c.getContext('2d').getImageData(600, 0, 31, 560).data; let rows = 0; for (let y = 0; y < 560; y++) { const a = (y * 31 + 12) * 4, b = (y * 31 + 18) * 4; if (Math.abs(d[a] - d[b]) + Math.abs(d[a + 1] - d[b + 1]) + Math.abs(d[a + 2] - d[b + 2]) > 60) rows++; } return rows; });
+  ok(edge === 0, `r3 card ${hsh}: no hard vertical edge at x=615 in the top 560px (${edge} rows differ across it)`);
   const lay = await p.evaluate(async () => window.__cardLayout());
   const want = Math.PI + (score / 100) * Math.PI, g = lay.gauge;
   ok(Math.abs(g.angle - want) < 0.02, `r3 card ${hsh}: needle angle ${g.angle.toFixed(3)} matches ${score}% (want ${want.toFixed(3)})`);
