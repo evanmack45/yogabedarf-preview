@@ -247,6 +247,16 @@ for (const [tag, hsh, a] of [['low', '', { h: 0, n: 0, b: 0 }], ['mid', '#r=200'
   ok(!/getUserMedia|camera\.|navigator\.geolocation/.test(readFileSync(new URL('../docs/app.js', import.meta.url), 'utf8')) && /no camera, microphone, account, cookie or tracker/.test(html), 'no camera or mic code; page says so');
   await p.context().close();
 }
+// Hero rule (bar v1.2, Shears 11/25): at 390x844 the header picture's visible box is at least 0.40 of the fold, the art is not blown up past 1.25x, the title sits on the art without covering the figure, and Start stays in the first screen
+{
+  const p = await page(390, 844, { deviceScaleFactor: 2 });
+  await p.goto(base, { waitUntil: 'networkidle' });
+  const h = await p.evaluate(() => { const VW = innerWidth, VH = innerHeight; const el = document.querySelector('.intro picture'), im = el.querySelector('img'); const r = el.getBoundingClientRect(); const w = Math.max(0, Math.min(VW, r.right) - Math.max(0, r.left)), hh = Math.max(0, Math.min(VH, r.bottom) - Math.max(0, r.top)); const ir = im.getBoundingClientRect(); const sc = Math.max(ir.width / im.naturalWidth, ir.height / im.naturalHeight); const src = +(/-?(\d+)\.webp/.exec(im.currentSrc.replace('hero-phone.webp', 'hero-phone-876.webp')) || [0, 1])[1]; const cp = document.querySelector('.intro-copy').getBoundingClientRect(); return { ratio: w * hh / (VW * VH), up: (im.naturalWidth * sc * devicePixelRatio) / src, src, copyBottom: cp.bottom, copyRight: cp.right, top: r.top, bottom: r.bottom, ow: document.documentElement.scrollWidth > VW }; });
+  ok(h.ratio >= 0.4, `hero: the header picture fills ${h.ratio.toFixed(3)} of the 390x844 first screen (need 0.40)`);
+  ok(h.up <= 1.25, `hero: art is sharp, ${h.up.toFixed(2)}x upscale from a ${h.src}px file at DPR 2`);
+  ok(h.copyBottom <= h.top + 130 && !h.ow, `hero: the title and gloss stay in the cream corner (bottom ${Math.round(h.copyBottom - h.top)}px into the art), no sideways scroll`);
+  await p.context().close();
+}
 { const r = await (await fetch(base + 'robots.txt')).text(); ok(/Allow: \//.test(r) && /Sitemap:/.test(r), 'robots.txt allows all and names the sitemap'); }
 await b.close();
 console.log(`\n${pass} passed, ${fail} failed`);
