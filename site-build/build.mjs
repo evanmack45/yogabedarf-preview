@@ -30,7 +30,9 @@ const group = (name, legend, opts) => `<fieldset class="q" data-q="${name}"><leg
 const ticks = [0, 25, 50, 75, 100].map((v) => { const a = Math.PI * (1 - v / 100), x = 120 + Math.cos(a) * 104, y = 124 - Math.sin(a) * 104, x2 = 120 + Math.cos(a) * 92, y2 = 124 - Math.sin(a) * 92; return `<line x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`; }).join('');
 const arc = (from, to, cls) => { const p = (v) => { const a = Math.PI * (1 - v / 100); return `${(120 + Math.cos(a) * 98).toFixed(1)} ${(124 - Math.sin(a) * 98).toFixed(1)}`; }; return `<path class="${cls}" d="M ${p(from)} A 98 98 0 0 1 ${p(to)}"/>`; };
 const SAFE = `Stop if anything hurts. This is not medical advice. If you are not sure these moves suit you, check with a doctor or physio first.`;
+const SAFE_SHORT = 'Stop if anything hurts. This is not medical advice.'; // full line stays in the footer
 
+const moveLI = (m) => `<li id="m-${m.id}">${hasArt(m.id) ? artPair(m.id, true, '(max-width: 520px) 240px, 150px') : `<div class="pair">${stills(m.id).map((p) => svg(p)).join('')}</div>`}<div><h3>${esc(m.name)}</h3><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${src(m).url}">${esc(src(m).name)}</a></p></div></li>`;
 const html = `<!doctype html>
 <html lang="en">
 <head>
@@ -53,6 +55,7 @@ const html = `<!doctype html>
 <link rel="preload" href="fonts/bricolage.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/atkinson.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 24a12 12 0 0 1 24 0' fill='none' stroke='%23173c36' stroke-width='5'/%3E%3Cline x1='16' y1='24' x2='24' y2='12' stroke='%23e2512e' stroke-width='3'/%3E%3C/svg%3E">
 </head>
 <body>
@@ -68,7 +71,7 @@ const html = `<!doctype html>
     </picture>
     <div class="intro-copy">
     <h1>Bedarf-o-Meter</h1>
-    <p class="gloss"><b lang="de">Bedarf</b> is German for <i>need</i>. This meter guesses how much stretch you need right now.</p>
+    <p class="gloss"><b lang="de">Bedarf</b> is German for <i>need</i>. Three taps measure yours.</p>
     <p class="friend" id="friend" hidden></p>
     </div>
   </div>
@@ -77,7 +80,7 @@ const html = `<!doctype html>
       <svg class="gauge" viewBox="0 0 240 140" aria-hidden="true">${arc(0, 25, 'z1')}${arc(25, 50, 'z2')}${arc(50, 75, 'z3')}${arc(75, 100, 'z4')}<g class="ticks">${ticks}</g><g class="needle"><line x1="120" y1="124" x2="120" y2="40"/><circle cx="120" cy="124" r="9"/></g></svg>
       <p class="score"><span id="score">${s0}</span><small>%</small></p>
       <p class="band" id="band">${band(s0).label}</p>
-      <p class="bandline" id="bandline">${tier(s0).name}. ${tier(s0).line}</p>
+      <p class="bandline" id="bandline">${tier(s0).name}</p>
     </div>
     <form class="qs" id="qs">
       ${group('h', 'Sitting today', HOURS)}
@@ -85,7 +88,7 @@ const html = `<!doctype html>
       ${group('b', 'Back and shoulders', BACK)}
       <p class="plan">Your four moves are <span id="plan">${((a) => `${a.slice(0, -1).join(', ')} and ${a[a.length - 1]}`)(plan0.map((id) => esc(byId[id].name)))}</span>.</p>
       <button class="btn go" id="start" type="submit">Start my 60 seconds</button>
-      <p class="safe">${SAFE}</p>
+      <p class="safe">${SAFE_SHORT}</p>
     </form>
   </section>
   <section class="session" id="session" hidden aria-label="Stretch session">
@@ -104,7 +107,7 @@ const html = `<!doctype html>
         <button class="btn ghost" type="button" id="stop">Stop</button>
         <button class="btn ghost" type="button" id="still" aria-pressed="false">Still pictures</button>
       </div>
-      <p class="safe">${SAFE}</p>
+      <p class="safe">${SAFE_SHORT}</p>
     </div>
   </section>
   <section class="done" id="done" hidden aria-label="Done">
@@ -126,9 +129,13 @@ const html = `<!doctype html>
 </main>
 <section class="moves" id="moves" aria-labelledby="moves-h">
   <h2 id="moves-h">The moves</h2>
-  <p class="mlede">${data.moves.length} gentle moves from the NHS and Mayo Clinic. The meter picks four, 15 seconds each, and different answers get different moves. Move slowly, never bounce, and only go as far as is comfortable. Mayo Clinic puts it simply. If you feel pain, you have stretched too far.</p>
-  <ol class="mlist">
-  ${data.moves.map((m) => `<li id="m-${m.id}">${hasArt(m.id) ? artPair(m.id, true, '(max-width: 520px) 240px, 150px') : `<div class="pair">${stills(m.id).map((p) => svg(p)).join('')}</div>`}<div><h3>${esc(m.name)}</h3><p>${esc(m.cue)}</p><p class="why">${esc(m.why)} <a href="${src(m).url}">${esc(src(m).name)}</a></p></div></li>`).join('\n  ')}
+  <p class="mlede">Your four moves, 15 seconds each. Go slowly and never bounce.</p>
+  <ol class="mlist" id="picks">
+  ${data.moves.filter((m) => plan0.includes(m.id)).map(moveLI).join('\n  ')}
+  </ol>
+  <p class="more-wrap"><button type="button" class="btn more" id="more-moves" aria-expanded="false" aria-controls="rest" data-n="${data.moves.length - plan0.length}">Show the other ${data.moves.length - plan0.length} moves</button></p>
+  <ol class="mlist" id="rest">
+  ${data.moves.filter((m) => !plan0.includes(m.id)).map(moveLI).join('\n  ')}
   </ol>
 </section>
 <section class="about" id="about" aria-labelledby="about-h">
@@ -140,9 +147,10 @@ const html = `<!doctype html>
     <li><img src="img/stretch-6.webp" width="320" height="319" alt="Outlined figure stretching an arm across the chest." loading="lazy" decoding="async"></li>
   </ul>
   <h2 id="about-h">About the meter</h2>
-  <p>The Bedarf score is a playful guess from your three taps, not a health measurement. More hours sitting and a stiffer neck or back push it up. A stiffer neck brings more neck moves, a tighter back more upper-body moves, and longer sitting bigger leg moves, some of them standing. All 36 answer sets get a different set of four.</p>
-  <p>Nothing you tap leaves your browser. There is no camera, no microphone, no account, no cookies and no trackers. The link you can copy holds only your three answers and whether you finished.</p>
-  <p>Sources, all checked on 25 November 2026, are ${Object.values(data.sources).map((s) => `<a href="${s.url}">${esc(s.name)}</a>`).join(', ')}.</p>
+  <p>The score is a playful guess from your three taps, not a health measurement. Each of the 36 answer sets gets its own four moves.</p>
+  <p>Nothing leaves your browser. There is no camera, microphone, account, cookie or tracker. The link you copy holds only your three answers and whether you finished.</p>
+  <p class="srchead">Sources, all checked on 25 November 2026:</p>
+  <ul class="srcs">${Object.values(data.sources).map((s) => `<li><a href="${s.url}">${esc(s.name)}</a></li>`).join('')}</ul>
 </section>
 <footer class="foot">
   <p>${SAFE}</p>

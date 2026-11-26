@@ -24,10 +24,32 @@ function showMeter() {
   const s = bedarf(answers), bd = band(s);
   $('meter').style.setProperty('--v', s);
   $('meter').dataset.band = bd.key;
-  $('score').textContent = s; $('band').textContent = bd.label; $('bandline').textContent = `${tier(s).name}. ${tier(s).line}`;
+  $('score').textContent = s; $('band').textContent = bd.label; $('bandline').textContent = tier(s).name;
   plan = pickMoves(answers);
   $('plan').textContent = list(plan.map((id) => byId[id].name));
+  sortMoves();
 }
+
+// The moves list shows the four chosen moves. The other twelve sit behind one button.
+const picks = $('picks'), rest = $('rest'), moreBtn = $('more-moves');
+function sortMoves() {
+  const li = (id) => $('m-' + id);
+  plan.forEach((id) => picks.append(li(id)));
+  moves.filter((m) => !plan.includes(m.id)).forEach((m) => rest.append(li(m.id)));
+}
+function setRest(open) {
+  rest.classList.toggle('open', open);
+  moreBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  moreBtn.textContent = open ? `Hide the other ${rest.children.length} moves` : `Show the other ${rest.children.length} moves`;
+}
+moreBtn.addEventListener('click', () => setRest(!rest.classList.contains('open')));
+// A link to one of the other twelve (#m-...) opens the list first.
+function openFromHash() {
+  if (!location.hash.startsWith('#m-')) return;
+  const el = document.getElementById(location.hash.slice(1));
+  if (el && rest.contains(el)) { setRest(true); el.scrollIntoView(); }
+}
+addEventListener('hashchange', openFromHash);
 
 $('qs').addEventListener('change', () => { read(); showMeter(); history.replaceState(null, '', `#${encode(answers, false)}`); $('friend').hidden = true; });
 
@@ -231,5 +253,6 @@ function fromHash() {
     }
   }
   view('setup');
+  openFromHash();
 }
 fromHash();
