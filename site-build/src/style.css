@@ -275,3 +275,111 @@ html:not(.js) .more-wrap { display: none; }
 .chair-list .c-sec { font-size: 14px; font-weight: 700; color: var(--ink2); margin-left: 6px; }
 .chair-list p { margin: 0 0 8px; }
 .chair-list .why { margin: 0; font-size: 15px; }
+
+/* Mason, Dash order 11/27 11:15: chair-stretch fold, stills, and tap targets only. Does not change the meter, share card, or gauge. */
+.chair-page .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  min-width: 48px;
+  line-height: 1;
+}
+.chair-page .brand-mark { display: block; width: 32px; height: 32px; flex: none; }
+.chair-page .toplink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 0 8px;
+  box-sizing: border-box;
+}
+.chair-hero {
+  margin: 0 -20px 8px;
+  width: calc(100% + 40px);
+}
+.chair-hero img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.chair-stills {
+  list-style: none;
+  margin: 0 0 12px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.chair-stills li {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 14px;
+  padding: 6px 6px 8px;
+}
+.chair-stills img {
+  display: block;
+  width: 100%;
+  height: 96px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: var(--paper);
+}
+.chair-page .chair h1 { margin: 0 0 8px; }
+.chair-page .chair .safe { margin: 0 0 10px; padding: 8px 10px; }
+@media (max-width: 899px) {
+  .chair-hero img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center center;
+  }
+}
+.chair-stills h2 { font: 800 16px/1.15 var(--display); margin: 4px 0 0; }
+.chair-stills .why { margin: 2px 0 0; font-size: 15px; }
+.chair-page .why a,
+.chair-page .foot a {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
+.chair-page .meter-link {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+}
+@media (max-width: 899px) {
+  /* Keep move how-tos below the 390×844 fold; stills stay in the first screen. */
+  .chair-page .chair-list { margin-top: 4rem; }
+}
+@media (min-width: 900px) {
+  /* Hero and the four stills share the 1280 fold; how-tos stay below. */
+  .chair-page .chair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 28px;
+    max-width: 1120px;
+    align-items: start;
+  }
+  .chair-page .chair-hero {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    margin: 0;
+    width: 100%;
+  }
+  .chair-page .chair h1 { grid-column: 2; grid-row: 1; margin-bottom: 0; }
+  .chair-page .chair .safe { grid-column: 2; grid-row: 2; margin-bottom: 0; }
+  .chair-page .chair-stills { grid-column: 2; grid-row: 3; }
+  .chair-page .chair-hero img {
+    width: 100%;
+    height: auto;
+    max-height: 520px;
+    object-fit: contain;
+    object-position: center top;
+  }
+  .chair-page .chair-stills img { height: 140px; }
+  .chair-page .chair-list,
+  .chair-page .chair > p:not(.chair-hero):not(.safe) { grid-column: 1 / -1; }
+  .chair-page .chair-list { margin-top: 12rem; }
+}

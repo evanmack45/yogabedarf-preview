@@ -164,3 +164,15 @@ Commit 147c1c2 (pushed, live on yogabedarf.com). The moves list shows the four c
 - e2e (qa/e2e.mjs): live 231 PASS, 0 FAIL (was 199). Counts fold words at 390 (82, limit under 100) and 1280 (73), checks low, mid, high and odd-hash inputs, keyboard, `#m-` link, no price text. One old assertion updated for the shorter privacy line.
 - Gate PASS (0 failing). Lighthouse 100/100/100/100, CLS 0, impeccable 0. Details: /workspace/gizmo/slop-fix.md.
 - No prices added. No DNS changes. Nobody messaged.
+
+## 2026-11-27 ~12:20 PM CT (Mason)
+
+By Dash's order of 11/27 11:15 AM CT: Shears visual-sweep item #1, `/chair-stretch-60-seconds/` only. I did not change the share card, the gauge, or any meter logic. Home is unchanged (still Gizmo's text wordmark).
+
+- Logo: there is no designed wordmark on the home. The chair header now uses the site's existing gauge favicon (the same inline SVG as the home favicon) next to the `yogabedarf` wordmark. I did not invent a new mark.
+- Images: reused the home meter illustration (`img/hero-phone.webp`) in the fold. Added one existing still for each of the four default moves: the stick-SVG peak pose for Neck turn (no painted pair exists; Gizmo left neck-turn as a stick figure because the r4 art turns the torso), and the existing painted pairs for Chest opener, Wrist circles, and Ankle stretch. How-tos and the long "why" lines stay below the fold, with the NHS/Mayo link on each still and again on each how-to.
+- Prose: deleted the 49-word intro and the duplicate 27-word safety box. Kept the title and the 11-word line "Stop if you feel sharp pain. This is not medical advice." (the exact sentence Shears specified; it is 11 words, not 9). Sweep-method fold prose 28 at 390 and 1280 (cap 40). Official fold 33 / 33.
+- Taps: on this page only, header brand and "Open the meter" are 48px; Bedarf-o-Meter is 48px; source links are 24px. Taps fail 0 at both widths.
+- Hero at 390: 390×300, **0.355**. Words/screen 101. Total 274 (cap 450). Logo=svg-lockup. Overflow 0.
+
+`qa/e2e.mjs`: the chair first-answer word-count now reads `#ch-safe`, because the intro that had been `#ch-answer` was deleted. Local e2e: meter, share card, and gauge checks all passed; the two local fails are the production canonical and sitemap hosts versus http://127.0.0.1 (same as before when this suite is pointed at localhost).

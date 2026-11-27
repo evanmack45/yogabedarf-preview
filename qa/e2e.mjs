@@ -275,7 +275,7 @@ for (const [tag, hsh, a] of [['low', '', { h: 0, n: 0, b: 0 }], ['mid', '#r=200'
   ok(r.status() === 200, 'chair-stretch page returns 200');
   const can = await p.getAttribute('link[rel="canonical"]', 'href');
   ok(can === origin + '/chair-stretch-60-seconds/', `chair canonical is the page URL (${can})`);
-  const ans = (await p.textContent('#ch-answer')).trim();
+  const ans = (await p.textContent('#ch-safe')).trim();
   ok(ans.split(/\s+/).length <= 60, `chair first answer is under 60 words (${ans.split(/\s+/).length})`);
   const mainWords = await p.$eval('main', (el) => (el.innerText.match(/\S+/g) || []).length);
   ok(mainWords <= 450, `chair main is under 450 words (${mainWords})`);
