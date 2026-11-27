@@ -176,3 +176,9 @@ By Dash's order of 11/27 11:15 AM CT: Shears visual-sweep item #1, `/chair-stret
 - Hero at 390: 390×300, **0.355**. Words/screen 101. Total 274 (cap 450). Logo=svg-lockup. Overflow 0.
 
 `qa/e2e.mjs`: the chair first-answer word-count now reads `#ch-safe`, because the intro that had been `#ch-answer` was deleted. Local e2e: meter, share card, and gauge checks all passed; the two local fails are the production canonical and sitemap hosts versus http://127.0.0.1 (same as before when this suite is pointed at localhost).
+
+Live verify of `1b7a9eb` on https://yogabedarf.com/chair-stretch-60-seconds/. Pages built `1b7a9eb` (18:12:44 UTC, 12:12 PM CT). Live HTML, CSS, `img/pose-neck-turn.svg`, `img/hero-phone.webp`, and the home page all equal the repo.
+
+Live Shears-method (matches local): 390 prose 28 / fold 33 / hero 0.35545 (390×300) / total 274 / wps 101 / tapsFail 0 / overflow 0 / logo=svg-lockup. 1280 prose 28 / fold 33. How-tos (`#ch-list`) start at 928.2 at 390 and 926.4 at 1280 and at 1440×900, all below the fold.
+
+visual-qa-gate on the live chair page: PASS (no P0, no P1). Lighthouse mobile 100/100/100/100, CLS 0.018, LCP 1.1s. Out: `/workspace/mason/scan-pass-qa/yoga-1b7a9eb/`. Live fold shots (viewed): `/workspace/mason/scan-pass-shots/order-1115/yoga-live/chair-{390,1280,1440}.png`.
