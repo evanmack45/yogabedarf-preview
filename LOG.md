@@ -182,3 +182,9 @@ Live verify of `1b7a9eb` on https://yogabedarf.com/chair-stretch-60-seconds/. Pa
 Live Shears-method (matches local): 390 prose 28 / fold 33 / hero 0.35545 (390×300) / total 274 / wps 101 / tapsFail 0 / overflow 0 / logo=svg-lockup. 1280 prose 28 / fold 33. How-tos (`#ch-list`) start at 928.2 at 390 and 926.4 at 1280 and at 1440×900, all below the fold.
 
 visual-qa-gate on the live chair page: PASS (no P0, no P1). Lighthouse mobile 100/100/100/100, CLS 0.018, LCP 1.1s. Out: `/workspace/mason/scan-pass-qa/yoga-1b7a9eb/`. Live fold shots (viewed): `/workspace/mason/scan-pass-shots/order-1115/yoga-live/chair-{390,1280,1440}.png`.
+
+## 2026-11-27 ~12:35 PM CT (Mason)
+
+Shears re-gate 12:29 PM CT: the fold safety line had no source. I kept the wording and linked “Stop if you feel sharp pain.” to the Mayo Clinic wrist page the page already cites: https://www.mayoclinic.org/healthy-lifestyle/adult-health/multimedia/forearm-stretches/vid-20084698 (“If you feel pain, you’ve gone too far.”). “This is not medical advice.” stays a disclaimer. Chair-page CSS only gives that link a 24px hit area. Home, share card, and gauge were not changed.
+
+Local official `measure.js` is unchanged: fold 33 / 33, total 275, words/screen at 390 102, sweep prose 28 / 28, hero 0.35545. How-tos stay below the fold at 390, 1280, and 1440.

@@ -383,3 +383,8 @@ html:not(.js) .more-wrap { display: none; }
   .chair-page .chair > p:not(.chair-hero):not(.safe) { grid-column: 1 / -1; }
   .chair-page .chair-list { margin-top: 12rem; }
 }
+
+.chair-page .safe a {
+  display: inline-block;
+  min-height: 24px;
+}
